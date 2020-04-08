@@ -204,7 +204,7 @@ class C_admin extends CI_Controller {
 	}
 /*MANAJEMEN SELEKSI*/
 
-/*MANAJEMEN BOBOT*/
+/*MANAJEMEN BOBOT TES*/
 	Public function viewListBobot()
 	{
 		$this->load->view('admin/header.php');
@@ -222,26 +222,78 @@ class C_admin extends CI_Controller {
 	{
 		$result="";
 		$id 			= $this->input->post('u_id');
-		$jenis_seleksi 	= $this->input->post('u_jenis_seleksi');
-        $nilai_bobot 	= $this->input->post('u_nilai_bobot');
+		$jenis_seleksi 	= $this->input->post('u_jenis_tes');
+        $nilai_bobot_tes 	= $this->input->post('u_nilai_bobot_tes');
 
         $cekJumlah = $this->M_admin->cekJumlahBobotSeleksi($id);
-        $jumlah = (int)$cekJumlah[0]->nilai_bobot+$nilai_bobot;
+        $jumlah = (int)$cekJumlah[0]->nilai_bobot_tes+$nilai_bobot_tes;
 
         if($jumlah<100){
-        	$data = [ 'result'	=> $this->M_admin->updateBobotSeleksi($id,$jenis_seleksi,$nilai_bobot),
+        	$data = [ 'result'	=> $this->M_admin->updateBobotSeleksi($id,$jenis_tes,$nilai_bobot_tes),
 					  'code' => 3];
         }else if($jumlah>100){
         	$data = [ 'code' => 2];
         }else{
-			$data = [ 'result'	=> $this->M_admin->updateBobotSeleksi($id,$jenis_seleksi,$nilai_bobot),
+			$data = [ 'result'	=> $this->M_admin->updateBobotSeleksi($id,$jenis_tes,$nilai_bobot_tes),
 					  'code' => 1];
         }
 
 		echo json_encode($data);
 	}
-/*MANAJEMEN BOBOT*/
+/*MANAJEMEN BOBOT TES*/
 
+/*MANAJEMEN SUB BOBOT SUB TES*/
+	Public function viewListBobotSub()
+	{
+		$this->load->view('admin/header.php');
+		$this->load->view('admin/v_list_sub_bobot');
+		$this->load->view('admin/footer.php');
+	}
+
+	public function getSubBobotPukul()
+	{
+		$data=$this->M_admin->getSubBobot("1");
+		echo json_encode($data);
+	}
+
+	public function getSubBobotTangkap()
+	{
+		$data=$this->M_admin->getSubBobot("2");
+		echo json_encode($data);
+	}
+
+	public function getSubBobotLempar()
+	{
+		$data=$this->M_admin->getSubBobot("3");
+		echo json_encode($data);
+	}
+
+	public function updateSubBobot()
+	{
+		$result="";
+		$id 				= $this->input->post('u_id');
+		$id_jenis_tes		= $this->input->post('u_jenis_tes');
+        $nilai_bobot_sub_tes 	= $this->input->post('u_nilai_bobot_sub_tes');
+
+
+        $cekJumlah = $this->M_admin->cekJumlahBobotSubSeleksi($id,$id_jenis_tes);
+        $jumlah = (int)$cekJumlah[0]->nilai_bobot_sub_tes+$nilai_bobot_sub_tes;
+
+        // print_r($jumlah);die();
+
+        if($jumlah<100){
+        	$data = [ 'result'	=> $this->M_admin->updateBobotSubSeleksi($id,$nilai_bobot_sub_tes),
+					  'code' => 3];
+        }else if($jumlah>100){
+        	$data = [ 'code' => 2];
+        }else{
+			$data = [ 'result'	=> $this->M_admin->updateBobotSubSeleksi($id,$nilai_bobot_sub_tes),
+					  'code' => 1];
+        }
+
+		echo json_encode($data);
+	}
+/*MANAJEMEN SUB BOBOT SUB TES*/
 
 }
 

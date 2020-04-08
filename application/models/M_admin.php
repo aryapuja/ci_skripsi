@@ -165,30 +165,59 @@
 	/*MANAJEMEN BOBOT*/
 		public function getBobot()
 			{
-				$query = $this->db->get('bobot_seleksi');
+				$query = $this->db->get('bobot_tes');
 				return $query->result();
 			}
 
 		public function cekJumlahBobotSeleksi($id)
 		{
-			$this->db->select_sum('nilai_bobot');
-			$this->db->where_not_in('id_bobot_seleksi', $id);
-			$query = $this->db->get('bobot_seleksi');
+			$this->db->select_sum('nilai_bobot_tes');
+			$this->db->where_not_in('id_bobot_tes', $id);
+			$query = $this->db->get('bobot_tes');
 			return $query->result();
 
 		}
 
-		public function updateBobotSeleksi($id,$jenis_seleksi,$nilai_bobot)
+		public function updateBobotSeleksi($id,$jenis_tes,$nilai_bobot_tes)
 		{
 			$data = array(
-				'jenis_seleksi' => $jenis_seleksi, 
-				'nilai_bobot' 	=> $nilai_bobot, 
+				'jenis_tes' => $jenis_tes, 
+				'nilai_bobot_tes' 	=> $nilai_bobot_tes, 
 			);
-			$this->db->where('id_bobot_seleksi', $id);
-			$result = $this->db->update('bobot_seleksi', $data);
+			$this->db->where('id_bobot_tes', $id);
+			$result = $this->db->update('bobot_tes', $data);
 			return $result;
 		}
 	/*MANAJEMEN BOBOT*/
+
+	/*MANAJEMEN SUB BOBOT*/
+		public function getSubBobot($id)
+			{
+				$this->db->where('id_bobot_tes', $id);
+				$query = $this->db->get('bobot_sub_tes');
+				return $query->result();
+			}
+
+		public function cekJumlahBobotSubSeleksi($id,$id_jenis_tes)
+		{
+			$this->db->select('nilai_bobot_sub_tes');
+			$this->db->where('id_bobot_tes', $id_jenis_tes);
+			$this->db->where('id_bobot_sub_tes !=', $id);
+			$query = $this->db->get('bobot_sub_tes');
+			return $query->result();
+
+		}
+
+		public function updateBobotSubSeleksi($id,$nilai_bobot_sub_tes)
+		{
+			$data = array(
+				'nilai_bobot_sub_tes' 	=> $nilai_bobot_sub_tes, 
+			);
+			$this->db->where('id_bobot_sub_tes', $id);
+			$result = $this->db->update('bobot_sub_tes', $data);
+			return $result;
+		}
+	/*MANAJEMEN SUB BOBOT*/
 
 	
 	}

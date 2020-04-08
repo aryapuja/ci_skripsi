@@ -119,11 +119,25 @@
               </li>
             </ul>
             <ul class="nav nav-treeview">
-              <li class="nav-item">
-                <a href="<?php echo site_url();?>/C_admin/viewListBobot" class="nav-link">
+              <li class="nav-item has-treeview">
+                <a href="#" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
-                  <p>Bobot Seleksi</p>
+                  <p>Bobot Tes Seleksi <i class="fas fa-angle-left right"></i></p>
                 </a>
+                <ul class="nav nav-treeview">
+                  <li class="nav-item">
+                    <a href="<?php echo site_url();?>/C_admin/viewListBobotSub" class="nav-link">
+                      <i class="far fa-dot-circle nav-icon"></i>
+                      <p>Per Tes </p>
+                    </a>
+                  </li>
+                  <li class="nav-item">
+                    <a href="<?php echo site_url();?>/C_admin/viewListBobot" class="nav-link">
+                      <i class="far fa-dot-circle nav-icon"></i>
+                      <p>Keseluruhan Tes</p>
+                    </a>
+                  </li>
+                </ul>
               </li>
             </ul>
           </li>

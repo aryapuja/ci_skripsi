@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Apr 03, 2020 at 12:39 PM
+-- Generation Time: Apr 08, 2020 at 12:09 PM
 -- Server version: 10.1.37-MariaDB
 -- PHP Version: 7.3.0
 
@@ -62,46 +62,49 @@ INSERT INTO `akun` (`id_akun`, `nama_lengkap`, `username`, `password`, `email`, 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `bobot_seleksi`
+-- Table structure for table `bobot_sub_tes`
 --
 
-CREATE TABLE `bobot_seleksi` (
-  `id_bobot_seleksi` int(11) NOT NULL,
-  `jenis_seleksi` varchar(30) NOT NULL,
-  `nilai_bobot` int(11) NOT NULL
+CREATE TABLE `bobot_sub_tes` (
+  `id_bobot_sub_tes` int(11) NOT NULL,
+  `id_bobot_tes` int(11) NOT NULL,
+  `jenis_sub_tes` varchar(30) NOT NULL,
+  `nilai_bobot_sub_tes` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Dumping data for table `bobot_seleksi`
+-- Dumping data for table `bobot_sub_tes`
 --
 
-INSERT INTO `bobot_seleksi` (`id_bobot_seleksi`, `jenis_seleksi`, `nilai_bobot`) VALUES
-(1, 'Tes Pukul', 30),
-(2, 'Tes Tangkap', 30),
-(3, 'Tes Lempar', 20),
-(4, 'Tes Lari', 20);
+INSERT INTO `bobot_sub_tes` (`id_bobot_sub_tes`, `id_bobot_tes`, `jenis_sub_tes`, `nilai_bobot_sub_tes`) VALUES
+(1, 1, 'Tes Keterampilan', 30),
+(2, 1, 'Tes Unjuk Kerja', 50),
+(3, 2, 'Tes Keterampilan', 60),
+(4, 2, 'Tes Unjuk Kerja', 40),
+(5, 3, 'Tes Keterampilan', 70),
+(6, 3, 'Tes Unjuk Kerja', 30);
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `bobot_unjuk_kerja`
+-- Table structure for table `bobot_tes`
 --
 
-CREATE TABLE `bobot_unjuk_kerja` (
-  `id_bobot_sub_seleksi` int(11) NOT NULL,
-  `id_bobot_seleksi` int(11) NOT NULL,
-  `nama_sub_seleksi` varchar(30) NOT NULL,
-  `nilai_bobot` int(11) NOT NULL
+CREATE TABLE `bobot_tes` (
+  `id_bobot_tes` int(11) NOT NULL,
+  `jenis_tes` varchar(30) NOT NULL,
+  `nilai_bobot_tes` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Dumping data for table `bobot_unjuk_kerja`
+-- Dumping data for table `bobot_tes`
 --
 
-INSERT INTO `bobot_unjuk_kerja` (`id_bobot_sub_seleksi`, `id_bobot_seleksi`, `nama_sub_seleksi`, `nilai_bobot`) VALUES
-(1, 1, 'pukul_uk', 40),
-(2, 2, 'tangkap_uk', 40),
-(3, 3, 'lempar_uk', 40);
+INSERT INTO `bobot_tes` (`id_bobot_tes`, `jenis_tes`, `nilai_bobot_tes`) VALUES
+(1, 'Tes Pukul', 30),
+(2, 'Tes Tangkap', 30),
+(3, 'Tes Lempar', 20),
+(4, 'Tes Lari', 20);
 
 -- --------------------------------------------------------
 
@@ -142,17 +145,18 @@ ALTER TABLE `akun`
   ADD UNIQUE KEY `email` (`email`);
 
 --
--- Indexes for table `bobot_seleksi`
+-- Indexes for table `bobot_sub_tes`
 --
-ALTER TABLE `bobot_seleksi`
-  ADD PRIMARY KEY (`id_bobot_seleksi`);
+ALTER TABLE `bobot_sub_tes`
+  ADD PRIMARY KEY (`id_bobot_sub_tes`),
+  ADD KEY `fk_id_bobot_tes` (`id_bobot_tes`);
 
 --
--- Indexes for table `bobot_unjuk_kerja`
+-- Indexes for table `bobot_tes`
 --
-ALTER TABLE `bobot_unjuk_kerja`
-  ADD PRIMARY KEY (`id_bobot_sub_seleksi`),
-  ADD KEY `fk_id_bobot_seleksi_unjuk_kerja` (`id_bobot_seleksi`);
+ALTER TABLE `bobot_tes`
+  ADD PRIMARY KEY (`id_bobot_tes`),
+  ADD KEY `jenis_tes` (`jenis_tes`);
 
 --
 -- Indexes for table `list_seleksi`
@@ -171,16 +175,16 @@ ALTER TABLE `akun`
   MODIFY `id_akun` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
--- AUTO_INCREMENT for table `bobot_seleksi`
+-- AUTO_INCREMENT for table `bobot_sub_tes`
 --
-ALTER TABLE `bobot_seleksi`
-  MODIFY `id_bobot_seleksi` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+ALTER TABLE `bobot_sub_tes`
+  MODIFY `id_bobot_sub_tes` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
--- AUTO_INCREMENT for table `bobot_unjuk_kerja`
+-- AUTO_INCREMENT for table `bobot_tes`
 --
-ALTER TABLE `bobot_unjuk_kerja`
-  MODIFY `id_bobot_sub_seleksi` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+ALTER TABLE `bobot_tes`
+  MODIFY `id_bobot_tes` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `list_seleksi`
@@ -193,10 +197,10 @@ ALTER TABLE `list_seleksi`
 --
 
 --
--- Constraints for table `bobot_unjuk_kerja`
+-- Constraints for table `bobot_sub_tes`
 --
-ALTER TABLE `bobot_unjuk_kerja`
-  ADD CONSTRAINT `fk_id_bobot_seleksi_unjuk_kerja` FOREIGN KEY (`id_bobot_seleksi`) REFERENCES `bobot_seleksi` (`id_bobot_seleksi`) ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE `bobot_sub_tes`
+  ADD CONSTRAINT `fk_id_bobot_tes` FOREIGN KEY (`id_bobot_tes`) REFERENCES `bobot_tes` (`id_bobot_tes`) ON DELETE CASCADE ON UPDATE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

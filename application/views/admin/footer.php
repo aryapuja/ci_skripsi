@@ -43,6 +43,9 @@
         showListUser();
 		showListSeleksi();
         showListBobot();
+        showListBobotPukul();
+        showListBobotTangkap();
+        showListBobotLempar();
 
 	/*MANAJEMEN AKUN*/
 		/*Show Akun*/
@@ -588,10 +591,10 @@
                             var ii = i+1;
                             html += '<tr style="center">'+
                             '<td>'+ii+' </td>'+
-                            '<td>'+data[i].jenis_seleksi+' </td>'+
-                            '<td>'+data[i].nilai_bobot+'% </td>'+
+                            '<td>'+data[i].jenis_tes+' </td>'+
+                            '<td>'+data[i].nilai_bobot_tes+'% </td>'+
                             '<td>'+
-                            '<a href="javascript:void(0);" class="btn btn-warning btn-sm bobot_edit" data-id_bobot_seleksi="'+data[i].id_bobot_seleksi+'" data-jenis_seleksi="'+data[i].jenis_seleksi+'" data-nilai_bobot="'+data[i].nilai_bobot+'"> <b> <span class="fa fa-edit"> </span> </b> </a>'
+                            '<a href="javascript:void(0);" class="btn btn-warning btn-sm bobot_edit" data-id_bobot_tes="'+data[i].id_bobot_tes+'" data-jenis_tes="'+data[i].jenis_tes+'" data-nilai_bobot_tes="'+data[i].nilai_bobot_tes+'"> <b> <span class="fa fa-edit"> </span> </b> </a>'
                             '</tr>';
                         }
                         $('#listBobot').find('tbody').empty();
@@ -603,17 +606,17 @@
             }
         /*Show Bobot*/
 
-        /*Edit Seleksi*/
+        /*Edit Bobot*/
             $('#listBobot').on('click','.bobot_edit',function(){
                 // memasukkan data yang dipilih dari tbl list agenda updatean ke variabel 
-                var upid            = $(this).data('id_bobot_seleksi');
-                var upjenis_seleksi  = $(this).data('jenis_seleksi');
-                var upnilai_bobot   = $(this).data('nilai_bobot'); 
+                var upid                = $(this).data('id_bobot_tes');
+                var upjenis_tes         = $(this).data('jenis_tes');
+                var upnilai_bobot_tes   = $(this).data('nilai_bobot_tes'); 
                 
                 // memasukkan data ke form updatean
-                $('[name="edt_id_bobot_seleksi"]').val(upid);
-                $('[name="edt_jenis_seleksi"]').val(upjenis_seleksi);
-                $('[name="edt_nilai_bobot"]').val(upnilai_bobot);
+                $('[name="edt_id_bobot_tes"]').val(upid);
+                $('[name="edt_jenis_tes"]').val(upjenis_tes);
+                $('[name="edt_nilai_bobot_tes"]').val(upnilai_bobot_tes);
 
                 $('#modalEditBobot').modal('show');
                 
@@ -623,9 +626,9 @@
             $('#formEditBobot').submit(function(e){
                 e.preventDefault(); 
                 // memasukkan data dari form update ke variabel untuk update db
-                var up_id            = $('#edt_id_bobot_seleksi').val();
-                var up_jenis_seleksi  = $('#edt_jenis_seleksi').val();
-                var up_nilai_bobot   = $('#edt_nilai_bobot').val();
+                var up_id               = $('#edt_id_bobot_tes').val();
+                var up_jenis_tes        = $('#edt_jenis_tes').val();
+                var up_nilai_bobot_tes  = $('#edt_nilai_bobot_tes').val();
 
                 $.ajax({
                     type : "POST",
@@ -633,8 +636,8 @@
                     dataType : "JSON",
                     data : { 
                         u_id:up_id,
-                        u_jenis_seleksi:up_jenis_seleksi,
-                        u_nilai_bobot:up_nilai_bobot,
+                        u_jenis_tes:up_jenis_tes,
+                        u_nilai_bobot_tes:up_nilai_bobot_tes,
                     },
 
                     success: function(data){
@@ -653,7 +656,7 @@
                         }else if(data.code==2){
                             Swal.fire({
                                     type: 'error',
-                                    title:'Jumlah Bobot Lebih Dari 100%',
+                                    title:'Jumlah Nilai Bobot Lebih Dari 100%',
                                     text: 'Silahkan Cek Kembali Bobot yang dimasukkan',
                                     showConfirmButton: true,
                                     // timer: 1500
@@ -676,9 +679,368 @@
                 });
                 return false;
             });
-        /*Edit Seleksi*/
+        /*Edit Bobot*/
     /*MANAJEMEN BOBOT*/
 
+    /*MANAJEMEN BOBOT SUB*/
+        /*Show Bobot Sub*/
+            function showListBobotPukul(){
+                $.ajax({
+                    type  : 'POST',
+                    url   : '<?php echo base_url()?>index.php/C_admin/getSubBobotPukul',
+                    async : false,
+                    dataType : 'json',
+                    success : function(data){
+                        var html = '';
+                        var i;
+                        for(i=0; i<data.length; i++){
+                            var ii = i+1;
+                            html += '<tr style="center">'+
+                            '<td>'+ii+' </td>'+
+                            '<td>'+data[i].jenis_sub_tes+' </td>'+
+                            '<td>'+data[i].nilai_bobot_sub_tes+'% </td>'+
+                            '<td>'+
+                            '<a href="javascript:void(0);" class="btn btn-warning btn-sm sub_bobot_edit" data-id_bobot_sub_tes="'+data[i].id_bobot_sub_tes+'"data-id_bobot_tes="'+data[i].id_bobot_tes+'" data-jenis_sub_tes="'+data[i].jenis_sub_tes+'" data-nilai_bobot_sub_tes="'+data[i].nilai_bobot_sub_tes+'"> <b> <span class="fa fa-edit"> </span> </b> </a>'
+                            '</tr>';
+                        }
+                        $('#listBobotPukul').find('tbody').empty();
+                        $('#showListBobotPukul').html(html);
+                        $('#listBobotPukul').DataTable({
+                            "paging": false,
+                            "lengthChange": false,
+                            "searching": false,
+                            "ordering": true,
+                            "info": false,
+                            "autoWidth": true,
+                        });
+                    }
+                });
+            }
+
+            function showListBobotTangkap(){
+                $.ajax({
+                    type  : 'POST',
+                    url   : '<?php echo base_url()?>index.php/C_admin/getSubBobotTangkap',
+                    async : false,
+                    dataType : 'json',
+                    success : function(data){
+                        var html = '';
+                        var i;
+                        for(i=0; i<data.length; i++){
+                            var ii = i+1;
+                            html += '<tr style="center">'+
+                            '<td>'+ii+' </td>'+
+                            '<td>'+data[i].jenis_sub_tes+' </td>'+
+                            '<td>'+data[i].nilai_bobot_sub_tes+'% </td>'+
+                            '<td>'+
+                            '<a href="javascript:void(0);" class="btn btn-warning btn-sm sub_bobot_edit" data-id_bobot_sub_tes="'+data[i].id_bobot_sub_tes+'"data-id_bobot_tes="'+data[i].id_bobot_tes+'" data-jenis_sub_tes="'+data[i].jenis_sub_tes+'" data-nilai_bobot_sub_tes="'+data[i].nilai_bobot_sub_tes+'"> <b> <span class="fa fa-edit"> </span> </b> </a>'
+                            '</tr>';
+                        }
+                        $('#listBobotTangkap').find('tbody').empty();
+                        $('#showListBobotTangkap').html(html);
+                        $('#listBobotTangkap').DataTable({
+                            "paging": false,
+                            "lengthChange": false,
+                            "searching": false,
+                            "ordering": true,
+                            "info": false,
+                            "autoWidth": true,
+                        });
+                    }
+                });
+            }
+
+            function showListBobotLempar(){
+                $.ajax({
+                    type  : 'POST',
+                    url   : '<?php echo base_url()?>index.php/C_admin/getSubBobotLempar',
+                    async : false,
+                    dataType : 'json',
+                    success : function(data){
+                        var html = '';
+                        var i;
+                        for(i=0; i<data.length; i++){
+                            var ii = i+1;
+                            html += '<tr style="center">'+
+                            '<td>'+ii+' </td>'+
+                            '<td>'+data[i].jenis_sub_tes+' </td>'+
+                            '<td>'+data[i].nilai_bobot_sub_tes+'% </td>'+
+                            '<td>'+
+                            '<a href="javascript:void(0);" class="btn btn-warning btn-sm sub_bobot_edit" data-id_bobot_sub_tes="'+data[i].id_bobot_sub_tes+'"data-id_bobot_tes="'+data[i].id_bobot_tes+'" data-jenis_sub_tes="'+data[i].jenis_sub_tes+'" data-nilai_bobot_sub_tes="'+data[i].nilai_bobot_sub_tes+'"> <b> <span class="fa fa-edit"> </span> </b> </a>'
+                            '</tr>';
+                        }
+                        $('#listBobotLempar').find('tbody').empty();
+                        $('#showListBobotLempar').html(html);
+                        $('#listBobotLempar').DataTable({
+                            "paging": false,
+                            "lengthChange": false,
+                            "searching": false,
+                            "ordering": true,
+                            "info": false,
+                            "autoWidth": true,
+                        });
+                    }
+                });
+            }
+        /*Show Bobot Sub*/
+
+        /*Edit Bobot*/
+            $('#listBobotPukul').on('click','.sub_bobot_edit',function(){
+                // memasukkan data yang dipilih dari tbl list agenda updatean ke variabel 
+                var upid                    = $(this).data('id_bobot_sub_tes');
+                var upjenis_sub_tes         = $(this).data('jenis_sub_tes');
+                var upnilai_bobot_sub_tes   = $(this).data('nilai_bobot_sub_tes');
+                var jenis_tes               = $(this).data('id_bobot_tes');
+
+                if(jenis_tes == 1){
+                    var upjenis_tes     = "Tes Pukul";
+                }else if(jenis_tes == 2){
+                    var upjenis_tes     = "Tes Tangkap";
+                }else{
+                    var upjenis_tes     = "Tes Lempar";
+                }
+                
+                // memasukkan data ke form updatean
+                $('[name="edt_id_bobot_sub_tes"]').val(upid);
+                $('[name="edt_id_bobot_tes"]').val(jenis_tes);
+                $('[name="edt_jenis_tes"]').val(upjenis_tes);
+                $('[name="edt_jenis_sub_tes"]').val(upjenis_sub_tes);
+                $('[name="edt_nilai_bobot_sub_tes"]').val(upnilai_bobot_sub_tes);
+
+                $('#modalEditSubBobot').modal('show');
+            });
+
+            //UPDATE record to database (submit button)
+            $('#formEditSubBobot').submit(function(e){
+                e.preventDefault(); 
+                // memasukkan data dari form update ke variabel untuk update db
+                var up_id                   = $('#edt_id_bobot_sub_tes').val();
+                var up_jenis_tes            = $('#edt_id_bobot_tes').val();
+                var up_jenis_sub_tes        = $('#edt_jenis_sub_tes').val();
+                var up_nilai_bobot_sub_tes  = $('#edt_nilai_bobot_sub_tes').val();
+
+                $.ajax({
+                    type : "POST",
+                    url  : "<?php echo site_url(); ?>/C_admin/updateSubBobot",
+                    dataType : "JSON",
+                    data : { 
+                        u_id:up_id,
+                        u_jenis_tes:up_jenis_tes,
+                        u_jenis_sub_tes:up_jenis_sub_tes,
+                        u_nilai_bobot_sub_tes:up_nilai_bobot_sub_tes,
+                    },
+
+                    success: function(data){
+                        if (data.code==1) {
+                            Swal.fire({
+                                    type: 'success',
+                                    title: 'Update Data Bobot Seleksi Sukses',
+                                    showConfirmButton: false,
+                                    timer: 1500
+                                })
+                            $('#modalEditSubBobot').modal('hide'); 
+                            $('#listBobotPukul').DataTable().destroy();
+                            $('#listBobotPukul').find('tbody').empty();
+                            document.getElementById('formEditSubBobot').reset();
+                            showListBobotPukul();
+                        }else if(data.code==2){
+                            Swal.fire({
+                                    type: 'error',
+                                    title:'Jumlah Nilai Bobot Lebih Dari 100%',
+                                    text: 'Silahkan Cek Kembali Bobot yang dimasukkan',
+                                    showConfirmButton: true,
+                                    // timer: 1500
+                                    })
+                        }else if(data.code==3){
+                            Swal.fire({
+                                    type: 'info',
+                                    title:'Jumlah Nilai Bobot Tes Keterampilan dan Unjuk Kerja Kurang Dari 100%',
+                                    text: 'Silahkan Cek Kembali Nilai Bobot Tes Pukul',
+                                    showConfirmButton: true,
+                                })
+                            $('#modalEditSubBobot').modal('hide'); 
+                            $('#listBobotPukul').DataTable().destroy();
+                            $('#listBobotPukul').find('tbody').empty();
+                            document.getElementById('formEditSubBobot').reset();
+                            showListBobotPukul();
+                        }
+                
+                    }
+                });
+                return false;
+            });
+
+            $('#listBobotTangkap').on('click','.sub_bobot_edit',function(){
+                // memasukkan data yang dipilih dari tbl list agenda updatean ke variabel 
+                var upid                    = $(this).data('id_bobot_sub_tes');
+                var upjenis_sub_tes         = $(this).data('jenis_sub_tes');
+                var upnilai_bobot_sub_tes   = $(this).data('nilai_bobot_sub_tes');
+                var jenis_tes               = $(this).data('id_bobot_tes');
+
+                if(jenis_tes == 1){
+                    var upjenis_tes     = "Tes Pukul";
+                }else if(jenis_tes == 2){
+                    var upjenis_tes     = "Tes Tangkap";
+                }else{
+                    var upjenis_tes     = "Tes Lempar";
+                }
+                
+                // memasukkan data ke form updatean
+                $('[name="edt_id_bobot_sub_tes"]').val(upid);
+                $('[name="edt_id_bobot_tes"]').val(jenis_tes);
+                $('[name="edt_jenis_tes"]').val(upjenis_tes);
+                $('[name="edt_jenis_sub_tes"]').val(upjenis_sub_tes);
+                $('[name="edt_nilai_bobot_sub_tes"]').val(upnilai_bobot_sub_tes);
+
+                $('#modalEditSubBobot').modal('show');
+            });
+
+            //UPDATE record to database (submit button)
+            $('#formEditSubBobot').submit(function(e){
+                e.preventDefault(); 
+                // memasukkan data dari form update ke variabel untuk update db
+                var up_id                   = $('#edt_id_bobot_sub_tes').val();
+                var up_jenis_tes            = $('#edt_id_bobot_tes').val();
+                var up_jenis_sub_tes        = $('#edt_jenis_sub_tes').val();
+                var up_nilai_bobot_sub_tes  = $('#edt_nilai_bobot_sub_tes').val();
+
+                $.ajax({
+                    type : "POST",
+                    url  : "<?php echo site_url(); ?>/C_admin/updateSubBobot",
+                    dataType : "JSON",
+                    data : { 
+                        u_id:up_id,
+                        u_jenis_tes:up_jenis_tes,
+                        u_jenis_sub_tes:up_jenis_sub_tes,
+                        u_nilai_bobot_sub_tes:up_nilai_bobot_sub_tes,
+                    },
+
+                    success: function(data){
+                        if (data.code==1) {
+                            Swal.fire({
+                                    type: 'success',
+                                    title: 'Update Data Bobot Seleksi Sukses',
+                                    showConfirmButton: false,
+                                    timer: 1500
+                                })
+                            $('#modalEditSubBobot').modal('hide'); 
+                            $('#listBobotTangkap').DataTable().destroy();
+                            $('#listBobotTangkap').find('tbody').empty();
+                            document.getElementById('formEditSubBobot').reset();
+                            showListBobotTangkap();
+                        }else if(data.code==2){
+                            Swal.fire({
+                                    type: 'error',
+                                    title:'Jumlah Nilai Bobot Lebih Dari 100%',
+                                    text: 'Silahkan Cek Kembali Bobot yang dimasukkan',
+                                    showConfirmButton: true,
+                                    // timer: 1500
+                                    })
+                        }else if(data.code==3){
+                            Swal.fire({
+                                    type: 'info',
+                                    title:'Jumlah Nilai Bobot Tes Keterampilan dan Unjuk Kerja Kurang Dari 100%',
+                                    text: 'Silahkan Cek Kembali Nilai Bobot Tes Tangkap',
+                                    showConfirmButton: true,
+                                })
+                            $('#modalEditSubBobot').modal('hide'); 
+                            $('#listBobotTangkap').DataTable().destroy();
+                            $('#listBobotTangkap').find('tbody').empty();
+                            document.getElementById('formEditSubBobot').reset();
+                            showListBobotTangkap();
+                        }
+                
+                    }
+                });
+                return false;
+            });
+
+            $('#listBobotLempar').on('click','.sub_bobot_edit',function(){
+                // memasukkan data yang dipilih dari tbl list agenda updatean ke variabel 
+                var upid                    = $(this).data('id_bobot_sub_tes');
+                var upjenis_sub_tes         = $(this).data('jenis_sub_tes');
+                var upnilai_bobot_sub_tes   = $(this).data('nilai_bobot_sub_tes');
+                var jenis_tes               = $(this).data('id_bobot_tes');
+
+                if(jenis_tes == 1){
+                    var upjenis_tes     = "Tes Pukul";
+                }else if(jenis_tes == 2){
+                    var upjenis_tes     = "Tes Tangkap";
+                }else{
+                    var upjenis_tes     = "Tes Lempar";
+                }
+                
+                // memasukkan data ke form updatean
+                $('[name="edt_id_bobot_sub_tes"]').val(upid);
+                $('[name="edt_id_bobot_tes"]').val(jenis_tes);
+                $('[name="edt_jenis_tes"]').val(upjenis_tes);
+                $('[name="edt_jenis_sub_tes"]').val(upjenis_sub_tes);
+                $('[name="edt_nilai_bobot_sub_tes"]').val(upnilai_bobot_sub_tes);
+
+                $('#modalEditSubBobot').modal('show');
+            });
+
+            //UPDATE record to database (submit button)
+            $('#formEditSubBobot').submit(function(e){
+                e.preventDefault(); 
+                // memasukkan data dari form update ke variabel untuk update db
+                var up_id                   = $('#edt_id_bobot_sub_tes').val();
+                var up_jenis_tes            = $('#edt_id_bobot_tes').val();
+                var up_jenis_sub_tes        = $('#edt_jenis_sub_tes').val();
+                var up_nilai_bobot_sub_tes  = $('#edt_nilai_bobot_sub_tes').val();
+
+                $.ajax({
+                    type : "POST",
+                    url  : "<?php echo site_url(); ?>/C_admin/updateSubBobot",
+                    dataType : "JSON",
+                    data : { 
+                        u_id:up_id,
+                        u_jenis_tes:up_jenis_tes,
+                        u_jenis_sub_tes:up_jenis_sub_tes,
+                        u_nilai_bobot_sub_tes:up_nilai_bobot_sub_tes,
+                    },
+
+                    success: function(data){
+                        if (data.code==1) {
+                            Swal.fire({
+                                    type: 'success',
+                                    title: 'Update Data Bobot Seleksi Sukses',
+                                    showConfirmButton: false,
+                                    timer: 1500
+                                })
+                            $('#modalEditSubBobot').modal('hide'); 
+                            $('#listBobotLempar').DataTable().destroy();
+                            $('#listBobotLempar').find('tbody').empty();
+                            document.getElementById('formEditSubBobot').reset();
+                            showListBobotLempar();
+                        }else if(data.code==2){
+                            Swal.fire({
+                                    type: 'error',
+                                    title:'Jumlah Nilai Bobot Lebih Dari 100%',
+                                    text: 'Silahkan Cek Kembali Bobot yang dimasukkan',
+                                    showConfirmButton: true,
+                                    // timer: 1500
+                                    })
+                        }else if(data.code==3){
+                            Swal.fire({
+                                    type: 'info',
+                                    title:'Jumlah Nilai Bobot Tes Keterampilan dan Unjuk Kerja Kurang Dari 100%',
+                                    text: 'Silahkan Cek Kembali Nilai Bobot Tes Lempar',
+                                    showConfirmButton: true,
+                                })
+                            $('#modalEditSubBobot').modal('hide'); 
+                            $('#listBobotLempar').DataTable().destroy();
+                            $('#listBobotLempar').find('tbody').empty();
+                            document.getElementById('formEditSubBobot').reset();
+                            showListBobotLempar();
+                        }
+                
+                    }
+                });
+                return false;
+            });
+        /*Edit Bobot*/
+    /*MANAJEMEN BOBOT SUB*/
 
 	});
 	   
