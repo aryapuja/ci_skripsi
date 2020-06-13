@@ -10,6 +10,7 @@
               </div>
               <!-- /.card-header -->
               <div class="card-body">
+                <div class="table-responsive">
                 <table id="listBobot" class="table table-bordered table-hover" cellspacing="0" width="100%">
                   <thead>
                   <tr>
@@ -30,7 +31,8 @@
                     <th> Aksi </th>
                   </tr>
                   </tfoot>
-              </table>
+                </table>
+                </div>
               </div>
               <!-- /.card-body -->
             </div>

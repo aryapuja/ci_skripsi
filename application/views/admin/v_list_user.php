@@ -11,7 +11,8 @@
               </div>
               <!-- /.card-header -->
               <div class="card-body">
-                <table id="listUser" class="table table-bordered table-hover table-responsive">
+                <div class="table-responsive">
+                <table id="listUser" class="table table-bordered table-hover">
                   <thead>
                   <tr>
                     <th class="th-lg no-sort"> No </th>
@@ -43,7 +44,8 @@
                     <th> Aksi </th>
                   </tr>
                   </tfoot>
-              </table>
+                </table>
+                </div>
               </div>
               <!-- /.card-body -->
             </div>
@@ -152,7 +154,7 @@
                     <option disabled selected hidden value="">Pilih</option>
                     <option value="admin">Admin PERBASASI</option>
                     <option value="penyeleksi">Penyeleksi</option>
-                    <option value="peserta">Peserta</option>
+                    <option value="anggota">Anggota</option>
                   </select>
                 </div>
 

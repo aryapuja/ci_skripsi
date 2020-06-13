@@ -72,6 +72,99 @@
     	}
 	/*MANAJEMEN USER*/
 	
+	/*MANAJEMEN NILAI*/
+		public function getSeleksi()
+		{
+			$this->db->where('status_seleksi', 'Belum Selesai');
+			$this->db->order_by('status_seleksi','asc');
+			$query = $this->db->get('list_seleksi');
+			return $query->result();
+		}
+
+		public function getPeserta($idSeleksi)
+		{
+			$this->db->where('id_seleksi', $idSeleksi);
+			$query = $this->db->get('list_peserta');
+			return $query->result();
+		}
+
+		public function getJumlahSet($id_seleksi,$namaTes)
+		{
+			$this->db->select($namaTes);
+			$this->db->where('id_seleksi', $id_seleksi);
+			$query = $this->db->get('list_seleksi');
+			return $query->result();
+		}
+
+		public function getTes()
+		{
+			$query = $this->db->get('bobot_tes');
+			return $query->result();
+		}
+
+		public function getSubTes()
+		{
+			// $this->db->where('id_bobot_tes', $id_bobot_tes);
+			$query = $this->db->get('bobot_sub_tes');
+			return $query->result();
+		}
+
+		public function getNilai($id_akun,$id_seleksi,$id_bobot_sub_tes,$set_ke)
+		{
+			$this->db->where('id_akun', $id_akun);
+			$this->db->where('id_seleksi', $id_seleksi);
+			$this->db->where('id_bobot_sub_tes', $id_bobot_sub_tes);
+			$this->db->where('set_ke', $set_ke);
+			$query = $this->db->get('nilai_per_tes');
+			if($query->num_rows() > 0){
+				return true;
+			}else{
+				return false;
+			}
+		}
+
+		public function inputNilai($id_akun,$nama_peserta,$id_seleksi,$id_tes,$id_sub_tes,$set_ke,$nilai_asli,$nilai_konversi)
+		{
+			$data = array(
+					'id_akun'			=> $id_akun,
+					'nama_peserta'		=> $nama_peserta, 
+					'id_seleksi' 		=> $id_seleksi, 
+					'id_bobot_tes'		=> $id_tes, 
+					'id_bobot_sub_tes'	=> $id_sub_tes, 
+					'set_ke' 			=> $set_ke, 
+					'nilai_asli' 		=> $nilai_asli, 
+					'nilai_konversi' 	=> $nilai_konversi, 
+				);
+			return $this->db->insert('nilai_per_tes', $data);
+		}
+
+		public function updateNilai($id_akun,$id_seleksi,$id_sub_tes,$set_ke,$nilai_asli, $nilai_konversi)
+		{
+			$data = array('nilai_asli'=> $nilai_asli, 'nilai_konversi'=> $nilai_konversi);
+			$this->db->where('id_akun', $id_akun);
+			$this->db->where('id_seleksi', $id_seleksi);
+			$this->db->where('id_bobot_sub_tes', $id_sub_tes);
+			$this->db->where('set_ke', $set_ke);
+	        $result = $this->db->update('nilai_per_tes', $data);
+	        return $result;
+		}
+
+		public function konversiNilai($id_bobot_tes)
+		{
+			$this->db->where('id_bobot_tes', $id_bobot_tes);
+			$query = $this->db->get('konversi');
+			return $query->result_array();
+		}
+
+		public function listNilai($id_seleksi,$id_akun)
+		{
+			$this->db->where('id_akun', $id_akun);
+			$this->db->where('id_seleksi', $id_seleksi);
+	        $query = $this->db->get('nilai_per_tes');
+	        return $query->result();
+		}
+	/*MANAJEMEN NILAI*/
+
 	}
 	
 	/* End of file M_admin.php */

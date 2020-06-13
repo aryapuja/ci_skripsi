@@ -32,6 +32,13 @@
   <link rel="stylesheet" href="<?php echo base_url();?>assets/sa/dist/sweetalert2.min.css">
 
 </head>
+
+<style>
+    body {
+      padding-right: 0 !important;
+    }
+</style>
+
 <body class="sidebar-mini sidebar-collapse layout-fixed">
 <div class="wrapper">
 
@@ -101,10 +108,10 @@
           <!-- Add icons to the links using the .nav-icon class
                with font-awesome or any other icon font library -->
           <li class="nav-item">
-            <a href="<?php echo site_url();?>/C_penyeleksi/viewUser" class="nav-link">
+            <a href="<?php echo site_url();?>/C_penyeleksi/viewListSeleksi" class="nav-link">
               <i class="nav-icon fas fa-users"></i>
               <p>
-                Daftar Akun
+                Daftar Seleksi
               </p>
             </a>
           </li>
@@ -211,11 +218,6 @@
                       <input type="text" id="edt_no_hp" name="edt_no_hp" class="form-control" placeholder="Nomor Aktif" style="width: 100%" onkeypress="return event.charCode >= 48 && event.charCode <= 57 || event.keyCode==8 || event.keyCode==9 || event.keyCode==37 || event.keyCode==39" value="<?php echo $akun[0]->no_hp ?>">
                     </div>
 
-                    <!-- <div class="col-md-6">
-                      <label>Nomor Telepon Orang Tua</label>
-                      <input type="text" id="edt_no_hp_ortu" name="edt_no_hp_ortu" class="form-control" placeholder="Nomor Aktif" style="width: 100%" onkeypress="return event.charCode >= 48 && event.charCode <= 57 || event.keyCode==8 || event.keyCode==9 || event.keyCode==37 || event.keyCode==39" >
-                    </div> -->
-
                     <div class="col-md-6">
                       <label>Jenis Kelamin</label>
                       <select class="form-control" name="edt_jenis_kelamin" id="edt_jenis_kelamin" required>
@@ -229,27 +231,6 @@
                       <label>Alamat Rumah</label>
                       <input type="text" id="edt_alamat_rumah" name="edt_alamat_rumah" class="form-control" placeholder="Masukkan alamat Rumah" minlength="6" style="width: 100%" required value="<?php echo $akun[0]->alamat_rumah ?>">
                     </div>
-
-                    <!-- <div class="col-md-12">
-                      <label>Asal Sekolah</label>
-                      <input type="text" id="edt_asal_sekolah" name="edt_asal_sekolah" class="form-control" placeholder="Masukkan Asal Sekolah" minlength="6" style="width: 100%" required>
-                    </div> -->
-
-
-                    <!-- <div class="col-md-4">
-                      <label>Tinggi Badan</label>
-                      <input type="text" id="edt_tinggi_badan" name="edt_tinggi_badan" class="form-control" placeholder="Satuan cm" maxlength="6" style="width: 100%" onkeypress="return event.charCode >= 48 && event.charCode <= 57 || event.keyCode==8 || event.keyCode==9 || event.keyCode==37 || event.keyCode==39" required readonly>
-                    </div> -->
-
-                    <!-- <div class="col-md-4">
-                      <label>Berat Badan </label>
-                      <input type="text" id="edt_berat_badan" name="edt_berat_badan" class="form-control" placeholder="Satuan kg" maxlength="6" style="width: 100%" onkeypress="return event.charCode >= 48 && event.charCode <= 57 || event.keyCode==8 || event.keyCode==9 || event.keyCode==37 || event.keyCode==39" required readonly>
-                    </div> -->
-
-                    <!-- <div class="col-md-12">
-                      <label>Riwayat Penyakit</label>
-                      <input type="text" id="edt_riwayat_penyakit" name="edt_riwayat_penyakit" class="form-control" placeholder="Pisahkan dengan tanda koma jika lebih dari 1" style="width: 100%">
-                    </div> -->
                   
                   </div>
                   </div>

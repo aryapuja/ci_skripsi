@@ -30,6 +30,7 @@
   <link rel="stylesheet" href="<?php echo base_url();?>assets/adminlte/plugins/datatables-bs4/css/dataTables.bootstrap4.css">
   <!-- SweetAlert -->
   <link rel="stylesheet" href="<?php echo base_url();?>assets/sa/dist/sweetalert2.min.css">
+
 </head>
 
 <style>
@@ -49,7 +50,7 @@
         <a class="nav-link" data-widget="pushmenu" href="#"><i class="fas fa-bars"></i></a>
       </li>
       <li class="nav-item d-none d-sm-inline-block">
-        <a href="<?php echo base_url();?>index.php/C_admin" class="nav-link">Home</a>
+        <a href="<?php echo base_url();?>index.php/C_anggota" class="nav-link">Home</a>
       </li>
     </ul>
 
@@ -61,7 +62,11 @@
           <i class="far fa-user"></i>
         </a>
         <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
-          <span class="dropdown-item dropdown-header"><?php echo $this->session->username; ?></span>
+          <span class="dropdown-item dropdown-header"><?php echo $this->session->username.' ('.$this->session->level_akun.')'; ?></span>
+          <div class="dropdown-divider"></div>
+          <a href="#" class="dropdown-item" data-toggle="modal" data-target="#modalEditAkun">
+            <i class="fas fa-edit mr-2"></i> Edit Informasi Akun
+          </a>
           <div class="dropdown-divider"></div>
           <a href="#" class="dropdown-item" data-toggle="modal" data-target="#modalGantiPassword">
             <i class="fas fa-key mr-2"></i> Ganti Password
@@ -102,76 +107,11 @@
         <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
           <!-- Add icons to the links using the .nav-icon class
                with font-awesome or any other icon font library -->
-          <li class="nav-item has-treeview">
-            <a href="#" class="nav-link">
-              <i class="nav-icon fas fa-tasks"></i>
-              <p>
-                Seleksi
-                <i class="fas fa-angle-left right"></i>
-              </p>
-            </a>
-            <ul class="nav nav-treeview">
-              <li class="nav-item">
-                <a href="<?php echo site_url();?>/C_admin/viewListSeleksi" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>List Seleksi</p>
-                </a>
-              </li>
-            </ul>
-            <ul class="nav nav-treeview">
-              <li class="nav-item has-treeview">
-                <a href="#" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Bobot Tes Seleksi <i class="fas fa-angle-left right"></i></p>
-                </a>
-                <ul class="nav nav-treeview">
-                  <li class="nav-item">
-                    <a href="<?php echo site_url();?>/C_admin/viewListBobotSub" class="nav-link">
-                      <i class="far fa-dot-circle nav-icon"></i>
-                      <p>Per Tes </p>
-                    </a>
-                  </li>
-                  <li class="nav-item">
-                    <a href="<?php echo site_url();?>/C_admin/viewListBobot" class="nav-link">
-                      <i class="far fa-dot-circle nav-icon"></i>
-                      <p>Keseluruhan Tes</p>
-                    </a>
-                  </li>
-                </ul>
-              </li>
-            </ul>
-            <ul class="nav nav-treeview">
-              <li class="nav-item">
-                <a href="<?php echo site_url();?>/C_admin/viewListNilaiStandar" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Nilai Standar</p>
-                </a>
-              </li>
-            </ul>
-            <ul class="nav nav-treeview">
-              <li class="nav-item">
-                <a href="<?php echo site_url();?>/C_admin/viewListNilaiKonversi" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Nilai Konversi</p>
-                </a>
-              </li>
-            </ul>
-          </li>
-          
           <li class="nav-item">
-            <a href="<?php echo site_url();?>/C_admin/viewHasilSeleksi" class="nav-link">
+            <a href="<?php echo site_url();?>/C_anggota/viewListSeleksi" class="nav-link">
               <i class="nav-icon fas fa-users"></i>
               <p>
-                Hasil Seleksi
-              </p>
-            </a>
-          </li>
-
-          <li class="nav-item">
-            <a href="<?php echo site_url();?>/C_admin/viewUser" class="nav-link">
-              <i class="nav-icon fas fa-users"></i>
-              <p>
-                Daftar Akun
+                List Seleksi
               </p>
             </a>
           </li>
@@ -197,7 +137,7 @@
     </div>
     <!-- /.content-header -->
 
-    <!-- FORM GANTI PASSWORD -->
+  <!-- FORM GANTI PASSWORD -->
     <form id="formGantiPassword">
       <div class="modal fade" id="modalGantiPassword" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="false">
         <div class="modal-dialog">
@@ -237,3 +177,99 @@
       </div>
     </form>
   <!-- FORM GANTI PASSWORD -->
+
+  <!-- FORM EDIT AKUN -->
+    <form id="formEditAkun">
+      <div class="modal fade" id="modalEditAkun" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document" style="max-width: 70%">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h4 class="modal-title">Update Informasi Akun</h4>
+              <button class="close" type="button" data-dismiss="modal" aria-hidden="true">&times;</button>
+            </div>
+            <div class="modal-body">
+              <div class="container-fluid">
+                <div class="row">
+                  <div class="form-group col-lg-12">
+                    <div class="row">
+
+                    <div class="col-md-6">
+                      <label>Username</label>
+                      <input type="text" id="edt_username" name="edt_username" class="form-control" placeholder="Masukkan 6-12 Karakter" minlength="6" maxlength="12" style="width: 100%" required readonly value="<?php echo $akun[0]->username ?>">
+                    </div>
+
+                    <div class="col-md-6">
+                      <label>Nama Lengkap</label>
+                      <input type="text" id="edt_nama_lengkap" name="edt_nama_lengkap" class="form-control" placeholder="Masukkan Nama Lengkap" style="width: 100%" required value="<?php echo $akun[0]->nama_lengkap ?>">
+                    </div>
+
+                    <div class="col-md-6">
+                      <label>Tanggal Lahir</label>
+                      <input type="date" id="edt_tgl_lahir" name="edt_tgl_lahir" class="form-control" placeholder="Masukkan Tanggal Lahir" minlength="6" style="width: 100%" required value="<?php echo $akun[0]->tgl_lahir ?>">
+                    </div>
+
+                    <div class="col-md-6">
+                      <label>Email</label>
+                      <input type="text" id="edt_email" name="edt_email" class="form-control" placeholder="Masukkan Email Aktif" minlength="6" style="width: 100%" required value="<?php echo $akun[0]->email ?>">
+                    </div>
+
+                    <div class="col-md-6">
+                      <label>Nomor Telepon</label>
+                      <input type="text" id="edt_no_hp" name="edt_no_hp" class="form-control" placeholder="Nomor Aktif" style="width: 100%" onkeypress="return event.charCode >= 48 && event.charCode <= 57 || event.keyCode==8 || event.keyCode==9 || event.keyCode==37 || event.keyCode==39" value="<?php echo $akun[0]->no_hp ?>">
+                    </div>
+
+                    <div class="col-md-6">
+                      <label>Nomor Telepon Orang Tua</label>
+                      <input type="text" id="edt_no_hp_ortu" name="edt_no_hp_ortu" class="form-control" placeholder="Nomor Aktif" style="width: 100%" onkeypress="return event.charCode >= 48 && event.charCode <= 57 || event.keyCode==8 || event.keyCode==9 || event.keyCode==37 || event.keyCode==39" value="<?php echo $akun[0]->no_hp_ortu ?>" >
+                    </div>
+
+                    <div class="col-md-4">
+                      <label>Jenis Kelamin</label>
+                      <select class="form-control" name="edt_jenis_kelamin" id="edt_jenis_kelamin" required>
+                        <option selected hidden value="<?php echo $akun[0]->jenis_kelamin ?>"><?php echo $akun[0]->jenis_kelamin ?></option>
+                        <option value="laki-laki">Laki-Laki</option>
+                        <option value="perempuan">Perempuan</option>
+                      </select>
+                    </div>
+
+                    <div class="col-md-4">
+                      <label>Tinggi Badan</label>
+                      <input type="text" id="edt_tinggi_badan" name="edt_tinggi_badan" class="form-control" placeholder="Satuan cm" maxlength="6" style="width: 100%" onkeypress="return event.charCode >= 48 && event.charCode <= 57 || event.keyCode==8 || event.keyCode==9 || event.keyCode==37 || event.keyCode==39" required value="<?php echo $akun[0]->tinggi_badan ?>">
+                    </div>
+
+                    <div class="col-md-4">
+                      <label>Berat Badan </label>
+                      <input type="text" id="edt_berat_badan" name="edt_berat_badan" class="form-control" placeholder="Satuan kg" maxlength="6" style="width: 100%" onkeypress="return event.charCode >= 48 && event.charCode <= 57 || event.keyCode==8 || event.keyCode==9 || event.keyCode==37 || event.keyCode==39" required value="<?php echo $akun[0]->berat_badan ?>">
+                    </div>
+
+                    <div class="col-md-12">
+                      <label>Alamat Rumah</label>
+                      <input type="text" id="edt_alamat_rumah" name="edt_alamat_rumah" class="form-control" placeholder="Masukkan alamat Rumah" minlength="6" style="width: 100%" required value="<?php echo $akun[0]->alamat_rumah ?>">
+                    </div>
+
+                    <div class="col-md-12">
+                      <label>Asal Sekolah</label>
+                      <input type="text" id="edt_asal_sekolah" name="edt_asal_sekolah" class="form-control" placeholder="Masukkan Asal Sekolah" minlength="6" style="width: 100%" required value="<?php echo $akun[0]->asal_sekolah ?>">
+                    </div>
+
+                    <div class="col-md-12">
+                      <label>Riwayat Penyakit</label>
+                      <input type="text" id="edt_riwayat_penyakit" name="edt_riwayat_penyakit" class="form-control" placeholder="Pisahkan dengan tanda koma jika lebih dari 1" style="width: 100%" value="<?php echo $akun[0]->riwayat_penyakit ?>">
+                    </div>
+                  
+                  </div>
+                  </div>
+                </div>
+                
+              </div>      
+            </div>
+            <div class="modal-footer">
+              <input type="hidden" id="edt_id_akun" name="edt_id_akun" value="">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+              <button type="submit" class="btn btn-primary">Update</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </form>
+  <!-- FORM EDIT AKUN -->

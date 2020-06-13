@@ -46,6 +46,12 @@
         showListBobotPukul();
         showListBobotTangkap();
         showListBobotLempar();
+        showNilaiKonversiPukul();
+        showNilaiKonversiTangkap();
+        showNilaiKonversiLempar();
+        showNilaiKonversiLari();
+        showListNilaiStandar();
+        showHasilSeleksi();
 
 	/*MANAJEMEN AKUN*/
 		/*Show Akun*/
@@ -382,12 +388,14 @@
                             '<td>'+data[i].jenis_olahraga+' ('+data[i].jenis_kelamin+')</td>'+
                             '<td>'+data[i].batas_umur+' Tahun </td>'+
                             '<td>'+data[i].tgl_seleksi+' </td>'+
-                            '<td>'+data[i].tgl_kejuaraan+' </td>'+
+                            // '<td>'+data[i].tgl_kejuaraan+' </td>'+
                             '<td>'+'<h5><span class="badge '+badge+'">'+data[i].status_seleksi+'</span></h5></td>'+
                             '<td>'+
-                            '<a href="javascript:void(0);" class="btn btn-warning btn-sm seleksi_edit" data-id_seleksi="'+data[i].id_seleksi+'" data-username="'+data[i].username+'" data-nama_seleksi="'+data[i].nama_seleksi+'" data-tgl_seleksi="'+data[i].tgl_seleksi+'" data-jenis_olahraga="'+data[i].jenis_olahraga+'" data-jenis_kelamin="'+data[i].jenis_kelamin+'" data-batas_umur="'+data[i].batas_umur+'" data-tgl_kejuaraan="'+data[i].tgl_kejuaraan+'" data-status_seleksi="'+data[i].status_seleksi+'"> <b> <span class="fa fa-edit"> </span> </b> </a>'
-                            +''+
-                             '<a href="javascript:void(0);" class="btn btn-danger btn-sm seleksi_delete" data-id_seleksi="'+data[i].id_seleksi+'" data-nama_seleksi="'+data[i].nama_seleksi+'" data-status_seleksi="'+data[i].status_seleksi+'"> <b> <span class="fa fa-trash"> </span> </b> </a>'
+                            '<a href="javascript:void(0);" class="btn btn-warning btn-sm seleksi_edit" data-id_seleksi="'+data[i].id_seleksi+'" data-username="'+data[i].username+'" data-nama_seleksi="'+data[i].nama_seleksi+'" data-tgl_seleksi="'+data[i].tgl_seleksi+'" data-jenis_olahraga="'+data[i].jenis_olahraga+'" data-jenis_kelamin="'+data[i].jenis_kelamin+'" data-batas_umur="'+data[i].batas_umur+'" data-tgl_kejuaraan="'+data[i].tgl_kejuaraan+'" data-status_seleksi="'+data[i].status_seleksi+'" data-jml_set_pukul="'+data[i].jml_set_pukul+'" data-jml_set_tangkap="'+data[i].jml_set_tangkap+'" data-jml_set_lempar="'+data[i].jml_set_lempar+'" data-jml_rep_lari="'+data[i].jml_rep_lari+'"> <b> <span class="fa fa-edit"> </span> </b> </a>'
+                            +'   '+
+                            '<a href="javascript:void(0);" class="btn btn-danger btn-sm seleksi_delete" data-id_seleksi="'+data[i].id_seleksi+'" data-nama_seleksi="'+data[i].nama_seleksi+'" data-status_seleksi="'+data[i].status_seleksi+'"> <b> <span class="fa fa-trash"> </span> </b> </a>'
+                             +'   '+
+                            '<a href="javascript:void(0);" class="btn btn-success btn-sm seleksi_selesai" data-id_seleksi="'+data[i].id_seleksi+'" data-nama_seleksi="'+data[i].nama_seleksi+'"> <b> <span class="fa fa-check-square"> </span> </b> </a>'
                             +'</td>'+
                             '</tr>';
                         }
@@ -395,6 +403,7 @@
                         $('#showListSeleksi').html(html);
                         $('#listSeleksi').DataTable({
                         });
+
                     }
                 });
             }
@@ -411,6 +420,10 @@
                 var uptgl_seleksi       = $(this).data('tgl_seleksi');
                 var uptgl_kejuaraan     = $(this).data('tgl_kejuaraan'); 
                 var upstatus_seleksi    = $(this).data('status_seleksi'); 
+                var upset_pukul         = $(this).data('jml_set_pukul'); 
+                var upset_tangkap       = $(this).data('jml_set_tangkap'); 
+                var upset_lempar        = $(this).data('jml_set_lempar'); 
+                var uprep_lari          = $(this).data('jml_rep_lari'); 
                 
                 // memasukkan data ke form updatean
                 $('[name="edt_id_seleksi"]').val(upid);
@@ -421,6 +434,10 @@
                 $('[name="edt_tgl_seleksi"]').val(uptgl_seleksi);
                 $('[name="edt_tgl_kejuaraan"]').val(uptgl_kejuaraan);
                 $('[name="edt_status_seleksi"]').val(upstatus_seleksi);
+                $('[name="edt_set_pukul"]').val(upset_pukul);
+                $('[name="edt_set_tangkap"]').val(upset_tangkap);
+                $('[name="edt_set_lempar"]').val(upset_lempar);
+                $('[name="edt_rep_lari"]').val(uprep_lari);
 
                 $('#modalEditSeleksi').modal('show');
                 
@@ -437,6 +454,10 @@
                 var up_batas_umur       = $('#edt_batas_umur').val();
                 var up_tgl_seleksi      = $('#edt_tgl_seleksi').val();
                 var up_tgl_kejuaraan    = $('#edt_tgl_kejuaraan').val();
+                var up_set_pukul        = $('#edt_set_pukul').val();
+                var up_set_tangkap      = $('#edt_set_tangkap').val();
+                var up_set_lempar       = $('#edt_set_lempar').val();
+                var up_rep_lari         = $('#edt_rep_lari').val();
 
 
                 $.ajax({
@@ -451,6 +472,10 @@
                         u_batas_umur:up_batas_umur,
                         u_tgl_seleksi:up_tgl_seleksi,
                         u_tgl_kejuaraan:up_tgl_kejuaraan,
+                        u_set_pukul:up_set_pukul,
+                        u_set_tangkap:up_set_tangkap,
+                        u_set_lempar:up_set_lempar,
+                        u_rep_lari:up_rep_lari,
                     },
 
                     success: function(data){
@@ -519,12 +544,16 @@
             $('#formCreateSeleksi').submit(function(e){
                 e.preventDefault();
                 // memasukkan data inputan ke variabel
-                var nama_seleksi        = $('#nama_seleksi').val();
-                var jenis_olahraga      = $('#jenis_olahraga').val();
-                var jenis_kelamin       = $('#jenis_kelamin').val();
-                var batas_umur          = $('#batas_umur').val();
-                var tgl_seleksi         = $('#tgl_seleksi').val();
-                var tgl_kejuaraan       = $('#tgl_kejuaraan').val();
+                var nama_seleksi    = $('#nama_seleksi').val();
+                var jenis_olahraga  = $('#jenis_olahraga').val();
+                var jenis_kelamin   = $('#jenis_kelamin').val();
+                var batas_umur      = $('#batas_umur').val();
+                var tgl_seleksi     = $('#tgl_seleksi').val();
+                var tgl_kejuaraan   = $('#tgl_kejuaraan').val();
+                var set_pukul       = $('#set_pukul').val();
+                var set_tangkap     = $('#set_tangkap').val();
+                var set_lempar      = $('#set_lempar').val();
+                var rep_lari        = $('#rep_lari').val();
 
                 $.ajax({
                     type : 'POST',
@@ -537,6 +566,10 @@
                         batas_umur:batas_umur,
                         tgl_seleksi:tgl_seleksi,
                         tgl_kejuaraan:tgl_kejuaraan,
+                        set_pukul:set_pukul,
+                        set_tangkap:set_tangkap,
+                        set_lempar:set_lempar,
+                        rep_lari:rep_lari,
                     },
 
                     success: function(data){
@@ -574,6 +607,47 @@
                 return false;
             });
         /*Buat Seleksi*/
+
+        /*Seleksi Selesai*/
+            $('#listSeleksi').on('click','.seleksi_selesai',function(){
+                var id = $(this).data('id_seleksi');
+                var nama_seleksi = $(this).data('nama_seleksi'); 
+
+                $('#modalStatusSeleksi').modal('show');
+                document.getElementById("msg").innerHTML='Seleksi "'+nama_seleksi+'"';
+                $('[name="id_status"]').val(id);
+            });
+
+            $('#formStatusSeleksi').submit(function(e){
+                e.preventDefault(); 
+                var id = $('#id_status').val();
+
+                $.ajax({
+                    type : "POST",
+                    url  : "<?php echo site_url(); ?>/C_admin/updateStatus",
+                    dataType : "JSON",
+                    data : {id:id},
+
+                    success: function(data){
+                        if (data.code==1) {
+                            Swal.fire({
+                                    type: 'success',
+                                    title: 'Update Data Seleksi Sukses',
+                                    showConfirmButton: false,
+                                    timer: 1500
+                                })
+                        }
+                        $('#modalStatusSeleksi').modal('hide'); 
+                        $("#listSeleksi").DataTable().destroy();
+                        $("#listSeleksi").find('tbody').empty();
+                        document.getElementById('formStatusSeleksi').reset();
+                        showListSeleksi();
+
+                    }
+                });
+                return false;
+            });
+        /*Seleksi Selesai*/
     /*MANAJEMEN SELEKSI*/
 
     /*MANAJEMEN BOBOT*/
@@ -810,66 +884,6 @@
                 $('#modalEditSubBobot').modal('show');
             });
 
-            //UPDATE record to database (submit button)
-            $('#formEditSubBobot').submit(function(e){
-                e.preventDefault(); 
-                // memasukkan data dari form update ke variabel untuk update db
-                var up_id                   = $('#edt_id_bobot_sub_tes').val();
-                var up_jenis_tes            = $('#edt_id_bobot_tes').val();
-                var up_jenis_sub_tes        = $('#edt_jenis_sub_tes').val();
-                var up_nilai_bobot_sub_tes  = $('#edt_nilai_bobot_sub_tes').val();
-
-                $.ajax({
-                    type : "POST",
-                    url  : "<?php echo site_url(); ?>/C_admin/updateSubBobot",
-                    dataType : "JSON",
-                    data : { 
-                        u_id:up_id,
-                        u_jenis_tes:up_jenis_tes,
-                        u_jenis_sub_tes:up_jenis_sub_tes,
-                        u_nilai_bobot_sub_tes:up_nilai_bobot_sub_tes,
-                    },
-
-                    success: function(data){
-                        if (data.code==1) {
-                            Swal.fire({
-                                    type: 'success',
-                                    title: 'Update Data Bobot Seleksi Sukses',
-                                    showConfirmButton: false,
-                                    timer: 1500
-                                })
-                            $('#modalEditSubBobot').modal('hide'); 
-                            $('#listBobotPukul').DataTable().destroy();
-                            $('#listBobotPukul').find('tbody').empty();
-                            document.getElementById('formEditSubBobot').reset();
-                            showListBobotPukul();
-                        }else if(data.code==2){
-                            Swal.fire({
-                                    type: 'error',
-                                    title:'Jumlah Nilai Bobot Lebih Dari 100%',
-                                    text: 'Silahkan Cek Kembali Bobot yang dimasukkan',
-                                    showConfirmButton: true,
-                                    // timer: 1500
-                                    })
-                        }else if(data.code==3){
-                            Swal.fire({
-                                    type: 'info',
-                                    title:'Jumlah Nilai Bobot Tes Keterampilan dan Unjuk Kerja Kurang Dari 100%',
-                                    text: 'Silahkan Cek Kembali Nilai Bobot Tes Pukul',
-                                    showConfirmButton: true,
-                                })
-                            $('#modalEditSubBobot').modal('hide'); 
-                            $('#listBobotPukul').DataTable().destroy();
-                            $('#listBobotPukul').find('tbody').empty();
-                            document.getElementById('formEditSubBobot').reset();
-                            showListBobotPukul();
-                        }
-                
-                    }
-                });
-                return false;
-            });
-
             $('#listBobotTangkap').on('click','.sub_bobot_edit',function(){
                 // memasukkan data yang dipilih dari tbl list agenda updatean ke variabel 
                 var upid                    = $(this).data('id_bobot_sub_tes');
@@ -893,66 +907,6 @@
                 $('[name="edt_nilai_bobot_sub_tes"]').val(upnilai_bobot_sub_tes);
 
                 $('#modalEditSubBobot').modal('show');
-            });
-
-            //UPDATE record to database (submit button)
-            $('#formEditSubBobot').submit(function(e){
-                e.preventDefault(); 
-                // memasukkan data dari form update ke variabel untuk update db
-                var up_id                   = $('#edt_id_bobot_sub_tes').val();
-                var up_jenis_tes            = $('#edt_id_bobot_tes').val();
-                var up_jenis_sub_tes        = $('#edt_jenis_sub_tes').val();
-                var up_nilai_bobot_sub_tes  = $('#edt_nilai_bobot_sub_tes').val();
-
-                $.ajax({
-                    type : "POST",
-                    url  : "<?php echo site_url(); ?>/C_admin/updateSubBobot",
-                    dataType : "JSON",
-                    data : { 
-                        u_id:up_id,
-                        u_jenis_tes:up_jenis_tes,
-                        u_jenis_sub_tes:up_jenis_sub_tes,
-                        u_nilai_bobot_sub_tes:up_nilai_bobot_sub_tes,
-                    },
-
-                    success: function(data){
-                        if (data.code==1) {
-                            Swal.fire({
-                                    type: 'success',
-                                    title: 'Update Data Bobot Seleksi Sukses',
-                                    showConfirmButton: false,
-                                    timer: 1500
-                                })
-                            $('#modalEditSubBobot').modal('hide'); 
-                            $('#listBobotTangkap').DataTable().destroy();
-                            $('#listBobotTangkap').find('tbody').empty();
-                            document.getElementById('formEditSubBobot').reset();
-                            showListBobotTangkap();
-                        }else if(data.code==2){
-                            Swal.fire({
-                                    type: 'error',
-                                    title:'Jumlah Nilai Bobot Lebih Dari 100%',
-                                    text: 'Silahkan Cek Kembali Bobot yang dimasukkan',
-                                    showConfirmButton: true,
-                                    // timer: 1500
-                                    })
-                        }else if(data.code==3){
-                            Swal.fire({
-                                    type: 'info',
-                                    title:'Jumlah Nilai Bobot Tes Keterampilan dan Unjuk Kerja Kurang Dari 100%',
-                                    text: 'Silahkan Cek Kembali Nilai Bobot Tes Tangkap',
-                                    showConfirmButton: true,
-                                })
-                            $('#modalEditSubBobot').modal('hide'); 
-                            $('#listBobotTangkap').DataTable().destroy();
-                            $('#listBobotTangkap').find('tbody').empty();
-                            document.getElementById('formEditSubBobot').reset();
-                            showListBobotTangkap();
-                        }
-                
-                    }
-                });
-                return false;
             });
 
             $('#listBobotLempar').on('click','.sub_bobot_edit',function(){
@@ -1009,10 +963,11 @@
                                     timer: 1500
                                 })
                             $('#modalEditSubBobot').modal('hide'); 
-                            $('#listBobotLempar').DataTable().destroy();
-                            $('#listBobotLempar').find('tbody').empty();
+                            $('#listBobotLempar').DataTable().destroy();$('#listBobotLempar').find('tbody').empty();
+                            $('#listBobotPukul').DataTable().destroy();$('#listBobotPukul').find('tbody').empty();
+                            $('#listBobotTangkap').DataTable().destroy();$('#listBobotTangkap').find('tbody').empty();
                             document.getElementById('formEditSubBobot').reset();
-                            showListBobotLempar();
+                            showListBobotLempar();showListBobotPukul();showListBobotTangkap();
                         }else if(data.code==2){
                             Swal.fire({
                                     type: 'error',
@@ -1024,15 +979,16 @@
                         }else if(data.code==3){
                             Swal.fire({
                                     type: 'info',
-                                    title:'Jumlah Nilai Bobot Tes Keterampilan dan Unjuk Kerja Kurang Dari 100%',
-                                    text: 'Silahkan Cek Kembali Nilai Bobot Tes Lempar',
+                                    title:'Jumlah Nilai Bobot Tes Keterampilan dan Unjuk Kerja Terkait Kurang Dari 100%',
+                                    text: 'Silahkan Cek Kembali',
                                     showConfirmButton: true,
                                 })
                             $('#modalEditSubBobot').modal('hide'); 
-                            $('#listBobotLempar').DataTable().destroy();
-                            $('#listBobotLempar').find('tbody').empty();
+                            $('#listBobotLempar').DataTable().destroy();$('#listBobotLempar').find('tbody').empty();
+                            $('#listBobotPukul').DataTable().destroy();$('#listBobotPukul').find('tbody').empty();
+                            $('#listBobotTangkap').DataTable().destroy();$('#listBobotTangkap').find('tbody').empty();
                             document.getElementById('formEditSubBobot').reset();
-                            showListBobotLempar();
+                            showListBobotLempar();showListBobotPukul();showListBobotTangkap();
                         }
                 
                     }
@@ -1042,8 +998,526 @@
         /*Edit Bobot*/
     /*MANAJEMEN BOBOT SUB*/
 
-	});
-	   
-</script> -->
+    /*MANAJEMEN NILAI STANDAR*/
+        /*Show List Nilai Standar*/
+            function showListNilaiStandar(){
+                $.ajax({
+                    type  : 'POST',
+                    url   : '<?php echo base_url()?>index.php/C_admin/getNilaiStandar',
+                    async : false,
+                    dataType : 'json',
+                    success : function(data){
+                        var html = '';
+                        var i;
+                        for(i=0; i<data.length; i++){
+                            var ii = i+1;
+                            html += '<tr style="center">'+
+                            '<td>'+ii+' </td>'+
+                            '<td> Nilai Standar '+data[i].jenis_tes+' </td>'+
+                            '<td>'+data[i].nilai_standar+' </td>'+
+                            '<td>'+
+                            '<a href="javascript:void(0);" class="btn btn-warning btn-sm std_edit" data-id_nilai_standar="'+data[i].id_nilai_standar+'" data-jenis_tes="'+data[i].jenis_tes+'" data-nilai_standar="'+data[i].nilai_standar+'"> <b> <span class="fa fa-edit"> </span> </b> </a>'
+                            '</tr>';
+                        }
+                        $('#listNilaiStandar').find('tbody').empty();
+                        $('#showListNilaiStandar').html(html);
+                        $('#listNilaiStandar').DataTable({
+                            "paging": false,
+                            "lengthChange": false,
+                            "searching": false,
+                            "ordering": true,
+                            "info": false,
+                            "autoWidth": true,
+                        });
+                    }
+                });
+            }
+        /*Show List Nilai Standar*/
+
+        /*Edit Bobot*/
+            $('#listNilaiStandar').on('click','.std_edit',function(){
+                // memasukkan data yang dipilih dari tbl list agenda updatean ke variabel 
+                var upid                = $(this).data('id_nilai_standar');
+                var upjenis_tes         = $(this).data('jenis_tes');
+                var upnilai_standar    = $(this).data('nilai_standar');
+                
+                // memasukkan data ke form updatean
+                $('[name="edt_id_nilai_std"]').val(upid);
+                $('[name="edt_jenis_tes"]').val(upjenis_tes);
+                $('[name="edt_nilai_standar"]').val(upnilai_standar);
+
+                $('#modalEditStandar').modal('show');
+            });
+
+            //UPDATE record to database (submit button)
+            $('#formEditStandar').submit(function(e){
+                e.preventDefault(); 
+                // memasukkan data dari form update ke variabel untuk update db
+                var up_id               = $('#edt_id_nilai_std').val();
+                var up_jenis_tes        = $('#edt_jenis_tes').val();
+                var up_nilai_standar    = $('#edt_nilai_standar').val();
+
+                $.ajax({
+                    type : "POST",
+                    url  : "<?php echo site_url(); ?>/C_admin/updateNilaiStandar",
+                    dataType : "JSON",
+                    data : { 
+                        u_id:up_id,
+                        u_jenis_tes:up_jenis_tes,
+                        u_nilai_standar:up_nilai_standar,
+                    },
+
+                    success: function(data){
+                        if (data.code==1) {
+                            Swal.fire({
+                                    type: 'success',
+                                    title: 'Update Data Nilai Standar Sukses',
+                                    showConfirmButton: false,
+                                    timer: 1500
+                                })
+                            $('#modalEditStandar').modal('hide'); 
+                            $('#listNilaiStandar').DataTable().destroy();$('#listNilaiStandar').find('tbody').empty();
+                            document.getElementById('formEditStandar').reset();
+                            showListNilaiStandar();
+                        }
+                    }
+                });
+                return false;
+            });
+        /*Edit Bobot*/
+    /*MANAJEMEN NILAI STANDAR*/
+
+    /*MANAJEMEN NILAI KONVERSI*/
+        /*Show Nilai Konversi*/
+            function showNilaiKonversiPukul(){
+                $.ajax({
+                    type  : 'POST',
+                    url   : '<?php echo base_url()?>index.php/C_admin/getNilaiKonversiPukul',
+                    async : false,
+                    dataType : 'json',
+                    success : function(data){
+                        var html = '';
+                        var i;
+                        for(i=0; i<data.length; i++){
+                            var ii = i+1;
+                            html += '<tr style="center">'+
+                            '<td>'+ii+' </td>'+
+                            '<td>'+data[i].nama_konversi+' </td>'+
+                            '<td>'+data[i].bts_bawah+' </td>'+
+                            '<td>'+data[i].bts_atas+' </td>'+
+                            '<td>'+
+                            '<a href="javascript:void(0);" class="btn btn-warning btn-sm sub_bobot_edit" data-id_konversi="'+data[i].id_konversi+'"data-id_bobot_tes="'+data[i].id_bobot_tes+'" data-nama_konversi="'+data[i].nama_konversi+'" data-bts_bawah="'+data[i].bts_bawah+'" data-bts_atas="'+data[i].bts_atas+'"> <b> <span class="fa fa-edit"> </span> </b> </a>'
+                            '</tr>';
+                        }
+                        $('#listNilaiKonversiPukul').find('tbody').empty();
+                        $('#showNilaiKonversiPukul').html(html);
+                        $('#listNilaiKonversiPukul').DataTable({
+                            "paging": false,
+                            "lengthChange": false,
+                            "searching": false,
+                            "ordering": true,
+                            "info": false,
+                            "autoWidth": true,
+                        });
+                    }
+                });
+            }
+
+            function showNilaiKonversiTangkap(){
+                $.ajax({
+                    type  : 'POST',
+                    url   : '<?php echo base_url()?>index.php/C_admin/getNilaiKonversiTangkap',
+                    async : false,
+                    dataType : 'json',
+                    success : function(data){
+                        var html = '';
+                        var i;
+                        for(i=0; i<data.length; i++){
+                            var ii = i+1;
+                            html += '<tr style="center">'+
+                            '<td>'+ii+' </td>'+
+                            '<td>'+data[i].nama_konversi+' </td>'+
+                            '<td>'+data[i].bts_bawah+' </td>'+
+                            '<td>'+data[i].bts_atas+' </td>'+
+                            '<td>'+
+                            '<a href="javascript:void(0);" class="btn btn-warning btn-sm sub_bobot_edit" data-id_konversi="'+data[i].id_konversi+'"data-id_bobot_tes="'+data[i].id_bobot_tes+'" data-nama_konversi="'+data[i].nama_konversi+'" data-bts_bawah="'+data[i].bts_bawah+'" data-bts_atas="'+data[i].bts_atas+'"> <b> <span class="fa fa-edit"> </span> </b> </a>'
+                            '</tr>';
+                        }
+                        $('#listNilaiKonversiTangkap').find('tbody').empty();
+                        $('#showNilaiKonversiTangkap').html(html);
+                        $('#listNilaiKonversiTangkap').DataTable({
+                            "paging": false,
+                            "lengthChange": false,
+                            "searching": false,
+                            "ordering": true,
+                            "info": false,
+                            "autoWidth": true,
+                        });
+                    }
+                });
+            }
+
+            function showNilaiKonversiLempar(){
+                $.ajax({
+                    type  : 'POST',
+                    url   : '<?php echo base_url()?>index.php/C_admin/getNilaiKonversiLempar',
+                    async : false,
+                    dataType : 'json',
+                    success : function(data){
+                        var html = '';
+                        var i;
+                        for(i=0; i<data.length; i++){
+                            var ii = i+1;
+                            html += '<tr style="center">'+
+                            '<td>'+ii+' </td>'+
+                            '<td>'+data[i].nama_konversi+' </td>'+
+                            '<td>'+data[i].bts_bawah+' </td>'+
+                            '<td>'+data[i].bts_atas+' </td>'+
+                            '<td>'+
+                            '<a href="javascript:void(0);" class="btn btn-warning btn-sm sub_bobot_edit" data-id_konversi="'+data[i].id_konversi+'"data-id_bobot_tes="'+data[i].id_bobot_tes+'" data-nama_konversi="'+data[i].nama_konversi+'" data-bts_bawah="'+data[i].bts_bawah+'" data-bts_atas="'+data[i].bts_atas+'"> <b> <span class="fa fa-edit"> </span> </b> </a>'
+                            '</tr>';
+                        }
+                        $('#listNilaiKonversiLempar').find('tbody').empty();
+                        $('#showNilaiKonversiLempar').html(html);
+                        $('#listNilaiKonversiLempar').DataTable({
+                            "paging": false,
+                            "lengthChange": false,
+                            "searching": false,
+                            "ordering": true,
+                            "info": false,
+                            "autoWidth": true,
+                        });
+                    }
+                });
+            }
+
+            function showNilaiKonversiLari(){
+                $.ajax({
+                    type  : 'POST',
+                    url   : '<?php echo base_url()?>index.php/C_admin/getNilaiKonversiLari',
+                    async : false,
+                    dataType : 'json',
+                    success : function(data){
+                        var html = '';
+                        var i;
+                        for(i=0; i<data.length; i++){
+                            var ii = i+1;
+                            html += '<tr style="center">'+
+                            '<td>'+ii+' </td>'+
+                            '<td>'+data[i].nama_konversi+' </td>'+
+                            '<td>'+data[i].bts_bawah+' detik </td>'+
+                            '<td>'+data[i].bts_atas+' detik </td>'+
+                            '<td>'+
+                            '<a href="javascript:void(0);" class="btn btn-warning btn-sm sub_bobot_edit" data-id_konversi="'+data[i].id_konversi+'"data-id_bobot_tes="'+data[i].id_bobot_tes+'" data-nama_konversi="'+data[i].nama_konversi+'" data-bts_bawah="'+data[i].bts_bawah+'" data-bts_atas="'+data[i].bts_atas+'"> <b> <span class="fa fa-edit"> </span> </b> </a>'
+                            '</tr>';
+                        }
+                        $('#listNilaiKonversiLari').find('tbody').empty();
+                        $('#showNilaiKonversiLari').html(html);
+                        $('#listNilaiKonversiLari').DataTable({
+                            "paging": false,
+                            "lengthChange": false,
+                            "searching": false,
+                            "ordering": true,
+                            "info": false,
+                            "autoWidth": true,
+                        });
+                    }
+                });
+            }
+        /*Show Nilai Konversi*/
+
+        /*Edit Bobot*/
+            $('#listNilaiKonversiPukul').on('click','.sub_bobot_edit',function(){
+                // memasukkan data yang dipilih dari tbl list agenda updatean ke variabel 
+                var upid                    = $(this).data('id_konversi');
+                var upnama_konversi         = $(this).data('nama_konversi');
+                var upbts_bawah             = $(this).data('bts_bawah');
+                var upbts_atas              = $(this).data('bts_atas');
+                var jenis_tes               = $(this).data('id_bobot_tes');
+
+                if(jenis_tes == 1){
+                    var upjenis_tes     = "Tes Pukul";
+                }else if(jenis_tes == 2){
+                    var upjenis_tes     = "Tes Tangkap";
+                }else if(jenis_tes == 3){
+                    var upjenis_tes     = "Tes Lempar";
+                }else{
+                    var upjenis_tes     = "Tes Lari";
+                }
+                
+                // memasukkan data ke form updatean
+                $('[name="edt_id_konversi"]').val(upid);
+                $('[name="edt_id_bobot_tes"]').val(jenis_tes);
+                $('[name="edt_jenis_tes"]').val(upjenis_tes);
+                $('[name="edt_nama_konversi"]').val(upnama_konversi);
+                $('[name="edt_bts_bawah"]').val(upbts_bawah);
+                $('[name="edt_bts_atas"]').val(upbts_atas);
+
+                $('#modalEditKonversi').modal('show');
+            });
+
+            $('#listNilaiKonversiTangkap').on('click','.sub_bobot_edit',function(){
+                // memasukkan data yang dipilih dari tbl list agenda updatean ke variabel 
+                var upid                    = $(this).data('id_konversi');
+                var upnama_konversi         = $(this).data('nama_konversi');
+                var upbts_bawah             = $(this).data('bts_bawah');
+                var upbts_atas              = $(this).data('bts_atas');
+                var jenis_tes               = $(this).data('id_bobot_tes');
+
+                if(jenis_tes == 1){
+                    var upjenis_tes     = "Tes Pukul";
+                }else if(jenis_tes == 2){
+                    var upjenis_tes     = "Tes Tangkap";
+                }else if(jenis_tes == 3){
+                    var upjenis_tes     = "Tes Lempar";
+                }else{
+                    var upjenis_tes     = "Tes Lari";
+                }
+                
+                // memasukkan data ke form updatean
+                $('[name="edt_id_konversi"]').val(upid);
+                $('[name="edt_id_bobot_tes"]').val(jenis_tes);
+                $('[name="edt_jenis_tes"]').val(upjenis_tes);
+                $('[name="edt_nama_konversi"]').val(upnama_konversi);
+                $('[name="edt_bts_bawah"]').val(upbts_bawah);
+                $('[name="edt_bts_atas"]').val(upbts_atas);
+
+                $('#modalEditKonversi').modal('show');
+            });
+
+            $('#listNilaiKonversiLempar').on('click','.sub_bobot_edit',function(){
+                // memasukkan data yang dipilih dari tbl list agenda updatean ke variabel 
+                var upid                    = $(this).data('id_konversi');
+                var upnama_konversi         = $(this).data('nama_konversi');
+                var upbts_bawah             = $(this).data('bts_bawah');
+                var upbts_atas              = $(this).data('bts_atas');
+                var jenis_tes               = $(this).data('id_bobot_tes');
+
+                if(jenis_tes == 1){
+                    var upjenis_tes     = "Tes Pukul";
+                }else if(jenis_tes == 2){
+                    var upjenis_tes     = "Tes Tangkap";
+                }else if(jenis_tes == 3){
+                    var upjenis_tes     = "Tes Lempar";
+                }else{
+                    var upjenis_tes     = "Tes Lari";
+                }
+                
+                // memasukkan data ke form updatean
+                $('[name="edt_id_konversi"]').val(upid);
+                $('[name="edt_id_bobot_tes"]').val(jenis_tes);
+                $('[name="edt_jenis_tes"]').val(upjenis_tes);
+                $('[name="edt_nama_konversi"]').val(upnama_konversi);
+                $('[name="edt_bts_bawah"]').val(upbts_bawah);
+                $('[name="edt_bts_atas"]').val(upbts_atas);
+
+                $('#modalEditKonversi').modal('show');
+            });
+
+            $('#listNilaiKonversiLari').on('click','.sub_bobot_edit',function(){
+                // memasukkan data yang dipilih dari tbl list agenda updatean ke variabel 
+                var upid                    = $(this).data('id_konversi');
+                var upnama_konversi         = $(this).data('nama_konversi');
+                var upbts_bawah             = $(this).data('bts_bawah');
+                var upbts_atas              = $(this).data('bts_atas');
+                var jenis_tes               = $(this).data('id_bobot_tes');
+
+                if(jenis_tes == 1){
+                    var upjenis_tes     = "Tes Pukul";
+                }else if(jenis_tes == 2){
+                    var upjenis_tes     = "Tes Tangkap";
+                }else if(jenis_tes == 3){
+                    var upjenis_tes     = "Tes Lempar";
+                }else{
+                    var upjenis_tes     = "Tes Lari";
+                }
+                
+                // memasukkan data ke form updatean
+                $('[name="edt_id_konversi"]').val(upid);
+                $('[name="edt_id_bobot_tes"]').val(jenis_tes);
+                $('[name="edt_jenis_tes"]').val(upjenis_tes);
+                $('[name="edt_nama_konversi"]').val(upnama_konversi);
+                $('[name="edt_bts_bawah"]').val(upbts_bawah);
+                $('[name="edt_bts_atas"]').val(upbts_atas);
+
+                $('#modalEditKonversi').modal('show');
+            });
+
+            //UPDATE record to database (submit button)
+            $('#formEditKonversi').submit(function(e){
+                e.preventDefault(); 
+                // memasukkan data dari form update ke variabel untuk update db
+                var up_id                   = $('#edt_id_konversi').val();
+                var up_nama_konversi        = $('#edt_nama_konversi').val();
+                var up_bts_bawah            = $('#edt_bts_bawah').val();
+                var up_bts_atas             = $('#edt_bts_atas').val();
+
+                $.ajax({
+                    type : "POST",
+                    url  : "<?php echo site_url(); ?>/C_admin/updateNilaiKonversi",
+                    dataType : "JSON",
+                    data : { 
+                        u_id:up_id,
+                        u_nama_konversi:up_nama_konversi,
+                        u_bts_bawah:up_bts_bawah,
+                        u_bts_atas:up_bts_atas,
+                    },
+
+                    success: function(data){
+                        if (data.code==1) {
+                            Swal.fire({
+                                    type: 'success',
+                                    title: 'Update Data Nilai Konversi Sukses',
+                                    showConfirmButton: false,
+                                    timer: 1500
+                                })
+                            $('#modalEditKonversi').modal('hide'); 
+                            $('#listNilaiKonversiLempar').DataTable().destroy();$('#listNilaiKonversiLempar').find('tbody').empty();
+                            $('#listNilaiKonversiPukul').DataTable().destroy();$('#listNilaiKonversiPukul').find('tbody').empty();
+                            $('#listNilaiKonversiTangkap').DataTable().destroy();$('#listNilaiKonversiTangkap').find('tbody').empty();
+                            $('#listNilaiKonversiLari').DataTable().destroy();$('#listNilaiKonversiLari').find('tbody').empty();
+                            document.getElementById('formEditKonversi').reset();
+                            showNilaiKonversiLempar();showNilaiKonversiPukul();showNilaiKonversiTangkap();showNilaiKonversiLari();
+                        }
+                
+                    }
+                });
+                return false;
+            });
+        /*Edit Bobot*/
+    /*MANAJEMEN NILAI KONVERSI*/
+
+    /*MANAJEMEN HASIL SELEKSI*/
+        /*Show List Hasil Seleksi*/
+            function showHasilSeleksi(){
+                $.ajax({
+                    type  : 'POST',
+                    url   : '<?php echo base_url()?>index.php/C_admin/getSeleksiSelesai',
+                    async : false,
+                    dataType : 'json',
+                    success : function(data){
+                        var html = '';
+                        var i;
+                        for(i=0; i<data.length; i++){
+                            var ii = i+1;
+                            html += '<tr style="center">'+
+                            '<td>'+ii+' </td>'+
+                            '<td>'+data[i].nama_seleksi+' </td>'+
+                            '<td>'+data[i].jenis_olahraga+' </td>'+
+                            '<td>'+data[i].tgl_seleksi+' </td>'+
+                            '<td>'+data[i].status_seleksi+' </td>'+
+                            '<td>'+
+                            '<a href="javascript:void(0);" class="btn btn-info btn-sm lihat_hasil" data-id_seleksi="'+data[i].id_seleksi+'" data-nama_seleksi="'+data[i].nama_seleksi+'" data-tgl_seleksi="'+data[i].tgl_seleksi+'" data-jenis_olahraga="'+data[i].jenis_olahraga+'" data-jenis_kelamin="'+data[i].jenis_kelamin+'" data-batas_umur="'+data[i].batas_umur+'" data-tgl_kejuaraan="'+data[i].tgl_kejuaraan+'" data-status_seleksi="'+data[i].status_seleksi+'" data-jml_set_pukul="'+data[i].jml_set_pukul+'" data-jml_set_tangkap="'+data[i].jml_set_tangkap+'" data-jml_set_lempar="'+data[i].jml_set_lempar+'" data-jml_rep_lari="'+data[i].jml_rep_lari+'"> <b> <span class="fa fa-eye"> Lihat</span> </b> </a>'
+                            +'     '+
+                             '<a href="javascript:void(0);" class="btn btn-success btn-sm download_hasil" data-id_seleksi="'+data[i].id_seleksi+'" data-nama_seleksi="'+data[i].nama_seleksi+'" data-tgl_seleksi="'+data[i].tgl_seleksi+'" data-jenis_olahraga="'+data[i].jenis_olahraga+'" data-jenis_kelamin="'+data[i].jenis_kelamin+'" data-batas_umur="'+data[i].batas_umur+'" data-tgl_kejuaraan="'+data[i].tgl_kejuaraan+'" data-status_seleksi="'+data[i].status_seleksi+'" data-jml_set_pukul="'+data[i].jml_set_pukul+'" data-jml_set_tangkap="'+data[i].jml_set_tangkap+'" data-jml_set_lempar="'+data[i].jml_set_lempar+'" data-jml_rep_lari="'+data[i].jml_rep_lari+'"> <b> <span class="fa fa-download"> Download</span> </b> </a>'
+                            +'</td>'+
+                            '</tr>';
+                        }
+                        $('#hasilSeleksi').find('tbody').empty();
+                        $('#showHasilSeleksi').html(html);
+                        $('#hasilSeleksi').DataTable({
+                        });
+
+                    }
+                });
+            }
+        /*Show List Hasil Seleksi*/
+
+         /*Edit Seleksi*/
+            $('#hasilSeleksi').on('click','.lihat_hasil',function(){
+                // memasukkan data yang dipilih dari tbl list agenda updatean ke variabel 
+                var upid                = $(this).data('id_seleksi');
+                var upnama_seleksi      = $(this).data('nama_seleksi');
+                var upjenis_olahraga    = $(this).data('jenis_olahraga'); 
+                var upjenis_kelamin     = $(this).data('jenis_kelamin'); 
+                var upbatas_umur        = $(this).data('batas_umur'); 
+                var uptgl_seleksi       = $(this).data('tgl_seleksi');
+                var uptgl_kejuaraan     = $(this).data('tgl_kejuaraan'); 
+                var upstatus_seleksi    = $(this).data('status_seleksi'); 
+                var upset_pukul         = $(this).data('jml_set_pukul'); 
+                var upset_tangkap       = $(this).data('jml_set_tangkap'); 
+                var upset_lempar        = $(this).data('jml_set_lempar'); 
+                var uprep_lari          = $(this).data('jml_rep_lari'); 
+                
+                // memasukkan data ke form updatean
+                $('[name="edt_id_seleksi"]').val(upid);
+                $('[name="edt_nama_seleksi"]').val(upnama_seleksi);
+                $('[name="edt_jenis_olahraga"]').val(upjenis_olahraga);
+                $('[name="edt_jenis_kelamin"]').val(upjenis_kelamin);
+                $('[name="edt_batas_umur"]').val(upbatas_umur);
+                $('[name="edt_tgl_seleksi"]').val(uptgl_seleksi);
+                $('[name="edt_tgl_kejuaraan"]').val(uptgl_kejuaraan);
+                $('[name="edt_status_seleksi"]').val(upstatus_seleksi);
+                $('[name="edt_set_pukul"]').val(upset_pukul);
+                $('[name="edt_set_tangkap"]').val(upset_tangkap);
+                $('[name="edt_set_lempar"]').val(upset_lempar);
+                $('[name="edt_rep_lari"]').val(uprep_lari);
+
+                $('#modalLihatHasil').modal('show');
+                
+            });
+
+            //UPDATE record to database (submit button)
+            $('#formLihatHasil').submit(function(e){
+                e.preventDefault(); 
+                // memasukkan data dari form update ke variabel untuk update db
+                var up_id_seleksi       = $('#edt_id_seleksi').val();
+                var up_nama_seleksi     = $('#edt_nama_seleksi').val();
+                var up_jenis_olahraga   = $('#edt_jenis_olahraga').val();
+                var up_jenis_kelamin    = $('#edt_jenis_kelamin').val();
+                var up_batas_umur       = $('#edt_batas_umur').val();
+                var up_tgl_seleksi      = $('#edt_tgl_seleksi').val();
+                var up_tgl_kejuaraan    = $('#edt_tgl_kejuaraan').val();
+                var up_set_pukul        = $('#edt_set_pukul').val();
+                var up_set_tangkap      = $('#edt_set_tangkap').val();
+                var up_set_lempar       = $('#edt_set_lempar').val();
+                var up_rep_lari         = $('#edt_rep_lari').val();
+                var up_jenis_tes        = $('#edt_jenis_tes').val();
+
+
+                $.ajax({
+                    type : "POST",
+                    url  : "<?php echo site_url(); ?>/C_admin/lihatHasilSeleksi",
+                    dataType : "JSON",
+                    data : { 
+                        u_id_seleksi:up_id_seleksi,
+                        u_nama_seleksi:up_nama_seleksi,
+                        u_jenis_olahraga:up_jenis_olahraga,
+                        u_jenis_kelamin:up_jenis_kelamin,
+                        u_batas_umur:up_batas_umur,
+                        u_tgl_seleksi:up_tgl_seleksi,
+                        u_tgl_kejuaraan:up_tgl_kejuaraan,
+                        u_set_pukul:up_set_pukul,
+                        u_set_tangkap:up_set_tangkap,
+                        u_set_lempar:up_set_lempar,
+                        u_rep_lari:up_rep_lari,
+                        u_jenis_tes:up_jenis_tes,
+                    },
+
+                    // success: function(data){
+                    //     if (data.code==1) {
+                    //         Swal.fire({
+                    //                 type: 'success',
+                    //                 title: 'Update Data Seleksi Sukses',
+                    //                 showConfirmButton: false,
+                    //                 timer: 1500
+                    //             })
+                    //         $('#modalEditSeleksi').modal('hide'); 
+                    //     }
+                        
+                    //     $('#hasilSeleksi').DataTable().destroy();
+                    //     $('#hasilSeleksi').find('tbody').empty();
+                    //     document.getElementById('formLihatHasil').reset();
+                    //     showListSeleksi();
+                    // }
+                });
+                return false;
+            });
+        /*Edit Seleksi*/
+    /*MANAJEMEN HASIL SELEKSI*/
+
+
+	}); 
+</script>
 </body>
 </html>

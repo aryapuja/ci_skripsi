@@ -43,7 +43,8 @@ class C_login extends CI_Controller {
 					'riwayat_penyakit'	=> $value->riwayat_penyakit, 
 					'status_akun'		=> $value->status_akun,
 					'level_akun'		=> $value->level_akun,
-					'status' 			=> TRUE
+					'status' 			=> TRUE,
+					'id_seleksi'		=> 0,
 				);
 				$this->session->set_userdata($userdata);
 
@@ -56,7 +57,7 @@ class C_login extends CI_Controller {
 					}else if($value->level_akun=="penyeleksi"){
 						redirect('C_penyeleksi','refresh');
 					}else{
-						redirect('C_peserta','refresh');
+						redirect('C_anggota','refresh');
 					}
 				}else{
 					$this->session->set_flashdata('status_off','Status Off');
