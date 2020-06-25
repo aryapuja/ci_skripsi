@@ -49,7 +49,8 @@
                   </div>
                   <!-- /.card-header -->
                   <div class="card-body">
-                    <table id="listNilaiKonversiTangkap" class="table table-bordered table-hover table-responsive" cellspacing="0" width="100%">
+                    <div class="table-responsive">
+                    <table id="listNilaiKonversiTangkap" class="table table-bordered table-hover" cellspacing="0" width="100%">
                       <thead>
                       <tr>
                         <th class="th-lg no-sort"> No </th>
@@ -71,7 +72,8 @@
                         <th> Aksi </th>
                       </tr>
                       </tfoot>
-                  </table>
+                    </table>
+                    </div>
                   </div>
                   <!-- /.card-body -->
                 </div>
@@ -84,7 +86,8 @@
                   </div>
                   <!-- /.card-header -->
                   <div class="card-body">
-                    <table id="listNilaiKonversiLempar" class="table table-bordered table-hover table-responsive" cellspacing="0" width="100%">
+                    <div class="table-responsive">
+                    <table id="listNilaiKonversiLempar" class="table table-bordered table-hover" cellspacing="0" width="100%">
                       <thead>
                       <tr>
                         <th class="th-lg no-sort"> No </th>
@@ -106,7 +109,8 @@
                         <th> Aksi </th>
                       </tr>
                       </tfoot>
-                  </table>
+                    </table>
+                    </div>
                   </div>
                   <!-- /.card-body -->
                 </div>
@@ -119,7 +123,8 @@
                   </div>
                   <!-- /.card-header -->
                   <div class="card-body">
-                    <table id="listNilaiKonversiLari" class="table table-bordered table-hover table-responsive" cellspacing="0" width="100%">
+                    <div class="table-responsive">
+                    <table id="listNilaiKonversiLari" class="table table-bordered table-hover" cellspacing="0" width="100%">
                       <thead>
                       <tr>
                         <th class="th-lg no-sort"> No </th>
@@ -141,7 +146,8 @@
                         <th> Aksi </th>
                       </tr>
                       </tfoot>
-                  </table>
+                    </table>
+                    </div>
                   </div>
                   <!-- /.card-body -->
                 </div>

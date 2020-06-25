@@ -40,8 +40,11 @@
 <!-- Fungsi -->
 <script>
 	$(document).ready(function(){
+        var pathArray   = window.location.pathname.split('/');
+        var segment     = pathArray[3];
         showListUser();
-		showListSeleksi();
+        showListSeleksi();
+		showListSeleksiBerjalan();
         showListBobot();
         showListBobotPukul();
         showListBobotTangkap();
@@ -51,7 +54,7 @@
         showNilaiKonversiLempar();
         showNilaiKonversiLari();
         showListNilaiStandar();
-        showHasilSeleksi();
+        showSeleksiSelesai();
 
 	/*MANAJEMEN AKUN*/
 		/*Show Akun*/
@@ -78,16 +81,12 @@
     	                    '<td>'+ii+' </td>'+
     	                    '<td>'+data[i].username+' </td>'+
     	                    '<td>'+data[i].nama_lengkap+' </td>'+
-    	                    '<td>'+data[i].tgl_lahir+' </td>'+
-    	                    '<td>'+data[i].jenis_kelamin+' </td>'+
     	                    '<td>'+data[i].asal_sekolah+' </td>'+
-    	                    '<td>'+data[i].email+' </td>'+
                             '<td>'+data[i].level_akun+' </td>'+
     	                    '<td>'+'<h5><span class="badge '+badge+'">'+data[i].status_akun+'</span></h5></td>'+
-    	                    // '<td style="background-color:'+color+'">'+data[i].status_akun+' </td>'+
     	                    '<td>'+
     	                    '<a href="javascript:void(0);" class="btn btn-warning btn-sm user_edit" data-id_akun="'+data[i].id_akun+'" data-username="'+data[i].username+'" data-nama_lengkap="'+data[i].nama_lengkap+'" data-email="'+data[i].email+'" data-tgl_lahir="'+data[i].tgl_lahir+'" data-no_hp="'+data[i].no_hp+'" data-no_hp_ortu="'+data[i].no_hp_ortu+'" data-alamat_rumah="'+data[i].alamat_rumah+'" data-jenis_kelamin="'+data[i].jenis_kelamin+'" data-asal_sekolah="'+data[i].asal_sekolah+'" data-berat_badan="'+data[i].berat_badan+'" data-tinggi_badan="'+data[i].tinggi_badan+'" data-riwayat_penyakit="'+data[i].riwayat_penyakit+'" data-level_akun="'+data[i].level_akun+'" data-status_akun="'+data[i].status_akun+'"> <b> <span class="fa fa-edit"> </span> </b> </a>'
-    	                    +''+
+    	                    +' '+
     	                     '<a href="javascript:void(0);" class="btn btn-danger btn-sm user_delete" data-id_akun="'+data[i].id_akun+'" data-username="'+data[i].username+'" data-nama_lengkap="'+data[i].nama_lengkap+'" data-asal_sekolah="'+data[i].asal_sekolah+'"> <b> <span class="fa fa-trash"> </span> </b> </a>'
     	                    +'</td>'+
     	                    '</tr>';
@@ -304,7 +303,9 @@
     		                            // timer: 1500
     		                        })
     						$('#Modal_Regis').modal('hide'); 
-    						document.getElementById('formRegis').reset();	
+    						document.getElementById('formRegis').reset();
+                            $('#listUser').DataTable().destroy();
+                            $('#listUser').find('tbody').empty();	
                             showListUser();
     					} 
     	            }
@@ -377,10 +378,15 @@
                         for(i=0; i<data.length; i++){
                             var ii = i+1;
                             badge = "";
+                            classLink = "";
                             if (data[i].status_seleksi == "Selesai") {
                                 badge = "badge-success";
+                                classLink = 'class="btn btn-success btn-sm seleksi_selesai disabled"';
+
                             }else if(data[i].status_seleksi == "Belum Selesai"){
                                 badge = "badge-danger";
+                                classLink = 'class="btn btn-success btn-sm seleksi_selesai"';
+                                // disabled = false;
                             }
                             html += '<tr style="center">'+
                             '<td>'+ii+' </td>'+
@@ -388,14 +394,13 @@
                             '<td>'+data[i].jenis_olahraga+' ('+data[i].jenis_kelamin+')</td>'+
                             '<td>'+data[i].batas_umur+' Tahun </td>'+
                             '<td>'+data[i].tgl_seleksi+' </td>'+
-                            // '<td>'+data[i].tgl_kejuaraan+' </td>'+
                             '<td>'+'<h5><span class="badge '+badge+'">'+data[i].status_seleksi+'</span></h5></td>'+
                             '<td>'+
-                            '<a href="javascript:void(0);" class="btn btn-warning btn-sm seleksi_edit" data-id_seleksi="'+data[i].id_seleksi+'" data-username="'+data[i].username+'" data-nama_seleksi="'+data[i].nama_seleksi+'" data-tgl_seleksi="'+data[i].tgl_seleksi+'" data-jenis_olahraga="'+data[i].jenis_olahraga+'" data-jenis_kelamin="'+data[i].jenis_kelamin+'" data-batas_umur="'+data[i].batas_umur+'" data-tgl_kejuaraan="'+data[i].tgl_kejuaraan+'" data-status_seleksi="'+data[i].status_seleksi+'" data-jml_set_pukul="'+data[i].jml_set_pukul+'" data-jml_set_tangkap="'+data[i].jml_set_tangkap+'" data-jml_set_lempar="'+data[i].jml_set_lempar+'" data-jml_rep_lari="'+data[i].jml_rep_lari+'"> <b> <span class="fa fa-edit"> </span> </b> </a>'
+                            '<a href="javascript:void(0);" class="btn btn-warning btn-sm seleksi_edit" data-id_seleksi="'+data[i].id_seleksi+'"  data-nama_seleksi="'+data[i].nama_seleksi+'" data-tgl_seleksi="'+data[i].tgl_seleksi+'" data-jenis_olahraga="'+data[i].jenis_olahraga+'" data-jenis_kelamin="'+data[i].jenis_kelamin+'" data-batas_umur="'+data[i].batas_umur+'" data-tgl_kejuaraan="'+data[i].tgl_kejuaraan+'" data-status_seleksi="'+data[i].status_seleksi+'" data-jml_set_pukul="'+data[i].jml_set_pukul+'" data-jml_set_tangkap="'+data[i].jml_set_tangkap+'" data-jml_set_lempar="'+data[i].jml_set_lempar+'" data-jml_rep_lari="'+data[i].jml_rep_lari+'"> <b> <span class="fa fa-edit"> </span> </b> </a>'
                             +'   '+
                             '<a href="javascript:void(0);" class="btn btn-danger btn-sm seleksi_delete" data-id_seleksi="'+data[i].id_seleksi+'" data-nama_seleksi="'+data[i].nama_seleksi+'" data-status_seleksi="'+data[i].status_seleksi+'"> <b> <span class="fa fa-trash"> </span> </b> </a>'
                              +'   '+
-                            '<a href="javascript:void(0);" class="btn btn-success btn-sm seleksi_selesai" data-id_seleksi="'+data[i].id_seleksi+'" data-nama_seleksi="'+data[i].nama_seleksi+'"> <b> <span class="fa fa-check-square"> </span> </b> </a>'
+                            '<a href="javascript:void(0);"'+classLink+'" data-id_seleksi="'+data[i].id_seleksi+'" data-nama_seleksi="'+data[i].nama_seleksi+'"> <b> <span class="fa fa-check-square"> </span> </b> </a>'
                             +'</td>'+
                             '</tr>';
                         }
@@ -408,6 +413,37 @@
                 });
             }
         /*Show Seleksi*/
+
+        /*Show Seleksi Berjalan*/
+            function showListSeleksiBerjalan(){
+                $.ajax({
+                    type  : 'POST',
+                    url   : '<?php echo base_url()?>index.php/C_admin/getSeleksiBerjalan',
+                    async : false,
+                    dataType : 'json',
+                    success : function(data){
+                        var html = '';
+                        var i;
+                        for(i=0; i<data.length; i++){
+                            var ii = i+1;
+                            html += '<tr style="center">'+
+                            '<td>'+ii+' </td>'+
+                            '<td>'+data[i].nama_seleksi+' </td>'+
+                            '<td>'+data[i].jenis_olahraga+' ('+data[i].jenis_kelamin+')</td>'+
+                            '<td>'+data[i].batas_umur+' Tahun </td>'+
+                            '<td>'+data[i].tgl_seleksi+' </td>'+
+                            '<td>'+data[i].tgl_kejuaraan+' </td>'+
+                            '</tr>';
+                        }
+                        $('#listSeleksiBerjalan').find('tbody').empty();
+                        $('#showListSeleksiBerjalan').html(html);
+                        $('#listSeleksiBerjalan').DataTable({
+                        });
+
+                    }
+                });
+            }
+        /*Show Seleksi Berjalan*/
 
         /*Edit Seleksi*/
             $('#listSeleksi').on('click','.seleksi_edit',function(){
@@ -1171,8 +1207,8 @@
                             html += '<tr style="center">'+
                             '<td>'+ii+' </td>'+
                             '<td>'+data[i].nama_konversi+' </td>'+
-                            '<td>'+data[i].bts_bawah+' </td>'+
-                            '<td>'+data[i].bts_atas+' </td>'+
+                            '<td>'+data[i].bts_bawah+' Meter</td>'+
+                            '<td>'+data[i].bts_atas+' Meter</td>'+
                             '<td>'+
                             '<a href="javascript:void(0);" class="btn btn-warning btn-sm sub_bobot_edit" data-id_konversi="'+data[i].id_konversi+'"data-id_bobot_tes="'+data[i].id_bobot_tes+'" data-nama_konversi="'+data[i].nama_konversi+'" data-bts_bawah="'+data[i].bts_bawah+'" data-bts_atas="'+data[i].bts_atas+'"> <b> <span class="fa fa-edit"> </span> </b> </a>'
                             '</tr>';
@@ -1208,7 +1244,7 @@
                             '<td>'+data[i].bts_bawah+' detik </td>'+
                             '<td>'+data[i].bts_atas+' detik </td>'+
                             '<td>'+
-                            '<a href="javascript:void(0);" class="btn btn-warning btn-sm sub_bobot_edit" data-id_konversi="'+data[i].id_konversi+'"data-id_bobot_tes="'+data[i].id_bobot_tes+'" data-nama_konversi="'+data[i].nama_konversi+'" data-bts_bawah="'+data[i].bts_bawah+'" data-bts_atas="'+data[i].bts_atas+'"> <b> <span class="fa fa-edit"> </span> </b> </a>'
+                            '<a href="javascript:void(0);" class="btn btn-warning btn-sm sub_bobot_edit" data-id_konversi="'+data[i].id_konversi+'" data-id_bobot_tes="'+data[i].id_bobot_tes+'" data-nama_konversi="'+data[i].nama_konversi+'" data-bts_bawah="'+data[i].bts_bawah+'" data-bts_atas="'+data[i].bts_atas+'"> <b> <span class="fa fa-edit"> </span> </b> </a>'
                             '</tr>';
                         }
                         $('#listNilaiKonversiLari').find('tbody').empty();
@@ -1388,8 +1424,8 @@
     /*MANAJEMEN NILAI KONVERSI*/
 
     /*MANAJEMEN HASIL SELEKSI*/
-        /*Show List Hasil Seleksi*/
-            function showHasilSeleksi(){
+        /*Show List Seleksi Seleksai*/
+            function showSeleksiSelesai(){
                 $.ajax({
                     type  : 'POST',
                     url   : '<?php echo base_url()?>index.php/C_admin/getSeleksiSelesai',
@@ -1405,118 +1441,59 @@
                             '<td>'+data[i].nama_seleksi+' </td>'+
                             '<td>'+data[i].jenis_olahraga+' </td>'+
                             '<td>'+data[i].tgl_seleksi+' </td>'+
-                            '<td>'+data[i].status_seleksi+' </td>'+
                             '<td>'+
-                            '<a href="javascript:void(0);" class="btn btn-info btn-sm lihat_hasil" data-id_seleksi="'+data[i].id_seleksi+'" data-nama_seleksi="'+data[i].nama_seleksi+'" data-tgl_seleksi="'+data[i].tgl_seleksi+'" data-jenis_olahraga="'+data[i].jenis_olahraga+'" data-jenis_kelamin="'+data[i].jenis_kelamin+'" data-batas_umur="'+data[i].batas_umur+'" data-tgl_kejuaraan="'+data[i].tgl_kejuaraan+'" data-status_seleksi="'+data[i].status_seleksi+'" data-jml_set_pukul="'+data[i].jml_set_pukul+'" data-jml_set_tangkap="'+data[i].jml_set_tangkap+'" data-jml_set_lempar="'+data[i].jml_set_lempar+'" data-jml_rep_lari="'+data[i].jml_rep_lari+'"> <b> <span class="fa fa-eye"> Lihat</span> </b> </a>'
-                            +'     '+
-                             '<a href="javascript:void(0);" class="btn btn-success btn-sm download_hasil" data-id_seleksi="'+data[i].id_seleksi+'" data-nama_seleksi="'+data[i].nama_seleksi+'" data-tgl_seleksi="'+data[i].tgl_seleksi+'" data-jenis_olahraga="'+data[i].jenis_olahraga+'" data-jenis_kelamin="'+data[i].jenis_kelamin+'" data-batas_umur="'+data[i].batas_umur+'" data-tgl_kejuaraan="'+data[i].tgl_kejuaraan+'" data-status_seleksi="'+data[i].status_seleksi+'" data-jml_set_pukul="'+data[i].jml_set_pukul+'" data-jml_set_tangkap="'+data[i].jml_set_tangkap+'" data-jml_set_lempar="'+data[i].jml_set_lempar+'" data-jml_rep_lari="'+data[i].jml_rep_lari+'"> <b> <span class="fa fa-download"> Download</span> </b> </a>'
+                            '<a href="<?php echo site_url();?>/C_admin/viewHasilSeleksi/'+data[i].id_seleksi+'" class="btn btn-info btn-sm lihat_hasil"> <b> <span class="fa fa-eye"> Cek Hasil Seleksi</span> </b> </a>'
+                            // '<a href="javascript:void(0);" class="btn btn-info btn-sm lihat_hasil" data-id_seleksi="'+data[i].id_seleksi+'"> <b> <span class="fa fa-eye"> Cek Hasil Seleksi</span> </b> </a>'
                             +'</td>'+
                             '</tr>';
                         }
-                        $('#hasilSeleksi').find('tbody').empty();
-                        $('#showHasilSeleksi').html(html);
-                        $('#hasilSeleksi').DataTable({
+                        $('#seleksiSelesai').find('tbody').empty();
+                        $('#showSeleksiSelesai').html(html);
+                        $('#seleksiSelesai').DataTable({
                         });
 
                     }
                 });
             }
-        /*Show List Hasil Seleksi*/
+        /*Show List Seleksi Seleksai*/
 
-         /*Edit Seleksi*/
-            $('#hasilSeleksi').on('click','.lihat_hasil',function(){
-                // memasukkan data yang dipilih dari tbl list agenda updatean ke variabel 
-                var upid                = $(this).data('id_seleksi');
-                var upnama_seleksi      = $(this).data('nama_seleksi');
-                var upjenis_olahraga    = $(this).data('jenis_olahraga'); 
-                var upjenis_kelamin     = $(this).data('jenis_kelamin'); 
-                var upbatas_umur        = $(this).data('batas_umur'); 
-                var uptgl_seleksi       = $(this).data('tgl_seleksi');
-                var uptgl_kejuaraan     = $(this).data('tgl_kejuaraan'); 
-                var upstatus_seleksi    = $(this).data('status_seleksi'); 
-                var upset_pukul         = $(this).data('jml_set_pukul'); 
-                var upset_tangkap       = $(this).data('jml_set_tangkap'); 
-                var upset_lempar        = $(this).data('jml_set_lempar'); 
-                var uprep_lari          = $(this).data('jml_rep_lari'); 
-                
-                // memasukkan data ke form updatean
-                $('[name="edt_id_seleksi"]').val(upid);
-                $('[name="edt_nama_seleksi"]').val(upnama_seleksi);
-                $('[name="edt_jenis_olahraga"]').val(upjenis_olahraga);
-                $('[name="edt_jenis_kelamin"]').val(upjenis_kelamin);
-                $('[name="edt_batas_umur"]').val(upbatas_umur);
-                $('[name="edt_tgl_seleksi"]').val(uptgl_seleksi);
-                $('[name="edt_tgl_kejuaraan"]').val(uptgl_kejuaraan);
-                $('[name="edt_status_seleksi"]').val(upstatus_seleksi);
-                $('[name="edt_set_pukul"]').val(upset_pukul);
-                $('[name="edt_set_tangkap"]').val(upset_tangkap);
-                $('[name="edt_set_lempar"]').val(upset_lempar);
-                $('[name="edt_rep_lari"]').val(uprep_lari);
+        /*Show Hasil*/
+        /*$('#seleksiSelesai').on('click','.lihat_hasil',function(){
+            var id_seleksi = $(this).data('id_seleksi');
+            $.ajax({
+                type  : 'POST',
+                url   : '<?php echo base_url()?>index.php/C_admin/getHasilSeleksi/'+id_seleksi,
+                async : false,
+                dataType : 'json',
+                success : function(data){
+                    var html = '';
+                    var i;
+                    for(i=0; i<data.length; i++){
+                        var ii = i+1;
+                        html += '<tr style="center">'+
+                        '<td>'+ii+' </td>'+
+                        '<td>'+data[i].nama_peserta+' </td>'+
+                        '<td>'+data[i].status+' </td>'+
+                        '</tr>';
+                    }
+                    $('#hasilSeleksi').find('tbody').empty();
+                    $('#showHasilSeleksi').html(html);
+                    $('#hasilSeleksi').DataTable({
+                    });
 
-                $('#modalLihatHasil').modal('show');
-                
+                }
             });
-
-            //UPDATE record to database (submit button)
-            $('#formLihatHasil').submit(function(e){
-                e.preventDefault(); 
-                // memasukkan data dari form update ke variabel untuk update db
-                var up_id_seleksi       = $('#edt_id_seleksi').val();
-                var up_nama_seleksi     = $('#edt_nama_seleksi').val();
-                var up_jenis_olahraga   = $('#edt_jenis_olahraga').val();
-                var up_jenis_kelamin    = $('#edt_jenis_kelamin').val();
-                var up_batas_umur       = $('#edt_batas_umur').val();
-                var up_tgl_seleksi      = $('#edt_tgl_seleksi').val();
-                var up_tgl_kejuaraan    = $('#edt_tgl_kejuaraan').val();
-                var up_set_pukul        = $('#edt_set_pukul').val();
-                var up_set_tangkap      = $('#edt_set_tangkap').val();
-                var up_set_lempar       = $('#edt_set_lempar').val();
-                var up_rep_lari         = $('#edt_rep_lari').val();
-                var up_jenis_tes        = $('#edt_jenis_tes').val();
-
-
-                $.ajax({
-                    type : "POST",
-                    url  : "<?php echo site_url(); ?>/C_admin/lihatHasilSeleksi",
-                    dataType : "JSON",
-                    data : { 
-                        u_id_seleksi:up_id_seleksi,
-                        u_nama_seleksi:up_nama_seleksi,
-                        u_jenis_olahraga:up_jenis_olahraga,
-                        u_jenis_kelamin:up_jenis_kelamin,
-                        u_batas_umur:up_batas_umur,
-                        u_tgl_seleksi:up_tgl_seleksi,
-                        u_tgl_kejuaraan:up_tgl_kejuaraan,
-                        u_set_pukul:up_set_pukul,
-                        u_set_tangkap:up_set_tangkap,
-                        u_set_lempar:up_set_lempar,
-                        u_rep_lari:up_rep_lari,
-                        u_jenis_tes:up_jenis_tes,
-                    },
-
-                    // success: function(data){
-                    //     if (data.code==1) {
-                    //         Swal.fire({
-                    //                 type: 'success',
-                    //                 title: 'Update Data Seleksi Sukses',
-                    //                 showConfirmButton: false,
-                    //                 timer: 1500
-                    //             })
-                    //         $('#modalEditSeleksi').modal('hide'); 
-                    //     }
-                        
-                    //     $('#hasilSeleksi').DataTable().destroy();
-                    //     $('#hasilSeleksi').find('tbody').empty();
-                    //     document.getElementById('formLihatHasil').reset();
-                    //     showListSeleksi();
-                    // }
-                });
-                return false;
-            });
-        /*Edit Seleksi*/
+            $('#modalLihatHasil').modal('show');
+        });*/
+        /*Show Hasil*/
     /*MANAJEMEN HASIL SELEKSI*/
 
-
+    $('#hasilSeleksi').DataTable( {
+        "scrollY"           : "200px",
+        "searching"         : false,
+        "scrollCollapse"    : false,
+        "paging"            : false
+    } );
 	}); 
 </script>
 </body>

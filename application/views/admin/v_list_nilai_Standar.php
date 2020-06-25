@@ -81,7 +81,7 @@
 
                   <div class="col-md-6">
                     <label>Nilai Standar</label>
-                    <input type="number" id="edt_nilai_standar" name="edt_nilai_standar" min="0" max="5" class="form-control"  style="width: 100%" required>
+                    <input type="number" id="edt_nilai_standar" name="edt_nilai_standar" min="0" max="10" class="form-control"  style="width: 100%" required>
                   </div>
                 
                 </div>

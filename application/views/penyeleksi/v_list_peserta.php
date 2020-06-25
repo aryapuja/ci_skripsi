@@ -102,14 +102,14 @@
                    <div class="col-md-6">
                     <label>Set Ke</label>
                     <select class="form-control" name="set_ke" id="set_ke" required disabled>
-                      <option selected hidden >Pilih</option>
+                      <option selected hidden >1</option>
 
                     </select>
                   </div>
 
                   <div class="col-md-6">
                     <label>Nilai</label>
-                    <input type="number" id="nilai_asli" name="nilai_asli" class="form-control" placeholder="Masukkan Nilai Tes" min="0" step="any" style="width: 100%" required>
+                    <input type="number" id="nilai_asli" name="nilai_asli" class="form-control" placeholder="Masukkan Nilai Tes" min="0" step="any" style="width: 100%" required disabled>
                   </div>
                 
                 </div>
@@ -130,14 +130,15 @@
       </div>
       
     </div>
+  </div>
   </form>
 <!-- FORM INPUT Nilai TES -->
 
-<!-- FORM LIHAT NILAI -->
+<!-- FORM CEK Nilai TES -->
   <form id="formCekNilai">
-    <div class="modal fade" id="modalCekNilai" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-      <div class="modal-dialog" role="document" >
-        <div class="modal-content">
+    <div class="modal fade" id="modalCekNilai" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" >
+      <div class="modal-dialog" role="document" style="max-width: 80%">
+        <div class="modal-content" >
           <div class="modal-header">
             <h4 class="modal-title">Formulir Input Nilai Tes</h4>
             <button class="close" type="button" data-dismiss="modal" aria-hidden="true">&times;</button>
@@ -148,35 +149,52 @@
               <div class="row">
                 <div class="form-group col-lg-12">
                   <div class="row">
-                     <div class="table-responsive">
+
+                  <div class="col-md-12">
+                    <label>Nama Lengkap</label>
+                    <input type="text" id="cek_nama_peserta" name="cek_nama_peserta" class="form-control" placeholder="Masukkan Nama Lengkap" style="width: 100%"  required readonly>
+                  </div>
+
+                  <div class="col-md-12">
+                    <label>Daftar Nilai Yang Sudah Masuk</label>
+                    <div class="table-responsive">
                       <table id="listNilai" class="table table-bordered table-hover" >
                         <thead style="width: 100%">
                         <tr style="width: 100%">
                           <th class="th-lg no-sort"> No </th>
-                          <th class="th-lg"> Jenis Tes </th>
-                          <th class="th-lg"> Nilai Tes </th>
+                          <th class="th-lg"> Tes </th>
+                          <th class="th-lg"> Sub Tes  </th>
+                          <th class="th-lg"> Set Ke </th>
+                          <th class="th-lg"> Nilai</th>
                         </tr>
                         </thead>
-                        <tbody id="showlistNilai">
+                        <tbody id="showListNilai">
                         
                         </tbody>
                         <tfoot>
                         <tr>
                           <th> No </th>
-                          <th> Jenis Tes </th>
-                          <th> Nilai Tes </th>
+                          <th> Tes </th>
+                          <th> Sub Tes </th>
+                          <th> Set Ke </th>
+                          <th> Nilai</th>
                         </tr>
                         </tfoot>
                       </table>
                     </div>
                   </div>
+                
+                </div>
                 </div>
               </div>
 
           </div>
           <div class="modal-footer">
+            <input type="hidden" id="cek_id_akun" name="cek_id_akun">
+            <input type="hidden" id="cek_id_seleksi" name="cek_id_seleksi">
+
             <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-            <button type="submit" class="btn btn-primary">Daftar</button>
+            <!-- <button type="submit" class="btn btn-primary">Daftar</button> -->
           </div>
           
         </div>
@@ -184,8 +202,11 @@
       </div>
       
     </div>
+  </div>
   </form>
-<!-- FORM LIHAT NILAI -->
+<!-- FORM CEK Nilai TES -->
+
+
 
 
 <script type="text/javascript">
@@ -195,7 +216,8 @@
     $(target).parents('.row').find('.slct_jenis_sub_tes').find('option').not('.sub_hide').hide();
     $(target).parents('.row').find('.slct_jenis_sub_tes').val('0');
     $(target).parents('.row').find('.slct_jenis_sub_tes').find('.sub-tes-'+jenisTes).show();
-    document.getElementById('id_sub_tes').removeAttribute('disabled');
+    document.getElementById('id_sub_tes').disabled=false;
+    document.getElementById('nilai_asli').disabled=false;
     document.getElementById('set_ke').removeAttribute('disabled');
 
     $.ajax({

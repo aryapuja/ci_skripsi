@@ -221,7 +221,7 @@
          Swal.fire({
             type: 'warning',
             title: 'Akun Tidak Terdaftar',
-            text: 'Silahkan periksa Nomor Induk dan password yang anda masukkan',
+            text: 'Silahkan periksa Username dan password yang anda masukkan',
             showConfirmButton: false,
             timer: 2500
         });
@@ -268,7 +268,15 @@
 					if(data.code==2){
 						Swal.fire({
 		                            type: 'warning',
-		                            title: 'Username sudah terdaftar',
+		                            title: 'Username yang dimasukkan sudah terdaftar',
+		                            text: 'Gunakan username lain atau hubungi admin untuk info lebih lanjut',
+		                            showConfirmButton: true,
+		                            // timer: 1500
+		                        })
+					}else if(data.code==3){
+						Swal.fire({
+		                            type: 'warning',
+		                            title: 'Email yang dimasukkan sudah terdaftar',
 		                            text: 'Gunakan username lain atau hubungi admin untuk info lebih lanjut',
 		                            showConfirmButton: true,
 		                            // timer: 1500

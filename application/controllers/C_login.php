@@ -9,6 +9,11 @@ class C_login extends CI_Controller {
 		$this->load->model('M_login');
 	}
 
+	// public function index()
+	// {
+	// 	$this->load->view('V_login');
+	// }
+
 	public function index()
 	{
 		$this->form_validation->set_rules('username', 'Username', 'trim|required');
@@ -86,11 +91,15 @@ class C_login extends CI_Controller {
 		$tinggi_badan 		= $this->input->post('tinggi_badan');
 		$riwayat_penyakit 	= $this->input->post('riwayat_penyakit');
 
-		$cek		= $this->M_login->getUsername($username);
+		$cekEmail			= $this->M_login->getEmail($email);
+		$cek				= $this->M_login->getUsername($username);
+
 		if($cek == true){
 			$data=['code' => 2];
+		}else if ($cekEmail == true) {
+			$data=['code' => 3];
 		}else{
-			$data=[ 'result'	=> $this->M_login->daftarAkunPeserta($nama_lengkap,$username,$password,$email,$tgl_lahir,$no_hp,$no_hp_ortu,$alamat_rumah,$asal_sekolah,$jenis_kelamin,$berat_badan,$tinggi_badan,$riwayat_penyakit),
+			$data=[ 'result'	=> $this->M_login->daftarAkunAnggota($nama_lengkap,$username,$password,$email,$tgl_lahir,$no_hp,$no_hp_ortu,$alamat_rumah,$asal_sekolah,$jenis_kelamin,$berat_badan,$tinggi_badan,$riwayat_penyakit),
 					'code' 		=> 1];
 		}
 		echo json_encode($data);

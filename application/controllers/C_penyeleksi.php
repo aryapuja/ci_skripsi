@@ -23,6 +23,12 @@ class C_penyeleksi extends CI_Controller {
 		$this->load->view('penyeleksi/footer');
 	}
 
+	public function getSeleksiBerjalan()
+	{
+		$data=$this->M_penyeleksi->getSeleksi();
+		echo json_encode($data);
+	}
+
 	/*MANAJEMEN AKUN*/
 		public function changePassword()
 		{
@@ -214,7 +220,7 @@ class C_penyeleksi extends CI_Controller {
 					if($nilai_asli > 5){	
 						$data =['code' => 1];
 		    		}else{
-						$data =['code' => 4, 'result' => $this->M_penyeleksi->inputNilai($id_akun,$nama_peserta,$id_seleksi,$id_sub_tes,$set_ke,$nilai_asli,$nilai_asli)];
+						$data =['code' => 4, 'result' => $this->M_penyeleksi->inputNilai($id_akun,$nama_peserta,$id_seleksi,$id_tes,$id_sub_tes,$set_ke,$nilai_asli,$nilai_asli)];
 		    		}
 		    	}else{
 						$data =['code' => 4, 'result' => $this->M_penyeleksi->inputNilai($id_akun,$nama_peserta,$id_seleksi,$id_tes,$id_sub_tes,$set_ke,$nilai_asli,$nilai_konversi)];
@@ -246,13 +252,11 @@ class C_penyeleksi extends CI_Controller {
 			return $nilai_konversi;
 		}
 
-		// public function lihatNilai($id_akun)
-		// {
-		// 	$data=$this->M_penyeleksi->listNilai($this->session->id_seleksi,$id_akun);
-		// 	echo json_encode($data);
-		// }
-
-
+		public function lihatNilai($id_akun)
+		{
+			$data=$this->M_penyeleksi->listNilai($this->session->id_seleksi,$id_akun);
+			echo json_encode($data);
+		}
 	/*MANAJEMEN INPUT NILAI*/
 
 

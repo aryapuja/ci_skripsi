@@ -43,10 +43,41 @@
 
         var pathArray   = window.location.pathname.split('/');
         var segment     = pathArray[3];
-        var segment2     = pathArray[5];
 
 		showListSeleksi();
+        showListSeleksiBerjalan();
         showListPeserta();
+
+    /*Show Seleksi Berjalan*/
+        function showListSeleksiBerjalan(){
+            $.ajax({
+                type  : 'POST',
+                url   : '<?php echo base_url()?>index.php/C_penyeleksi/getSeleksiBerjalan',
+                async : false,
+                dataType : 'json',
+                success : function(data){
+                    var html = '';
+                    var i;
+                    for(i=0; i<data.length; i++){
+                        var ii = i+1;
+                        html += '<tr style="center">'+
+                        '<td>'+ii+' </td>'+
+                        '<td>'+data[i].nama_seleksi+' </td>'+
+                        '<td>'+data[i].jenis_olahraga+' ('+data[i].jenis_kelamin+')</td>'+
+                        '<td>'+data[i].batas_umur+' Tahun </td>'+
+                        '<td>'+data[i].tgl_seleksi+' </td>'+
+                        '<td>'+data[i].tgl_kejuaraan+' </td>'+
+                        '</tr>';
+                    }
+                    $('#listSeleksiBerjalan').find('tbody').empty();
+                    $('#showListSeleksiBerjalan').html(html);
+                    $('#listSeleksiBerjalan').DataTable({
+                    });
+
+                }
+            });
+        }
+    /*Show Seleksi Berjalan*/
 
 	/*MANAJEMEN AKUN*/
     	/*Edit Akun*/
@@ -205,7 +236,7 @@
                             '<a href="javascript:void(0);" class="btn btn-primary btn-sm input_nilai" data-id_akun="'+data[i].id_akun+'" data-id_seleksi="'+data[i].id_seleksi+'" data-nama_peserta="'+data[i].nama_peserta+'"> <b> <span class="fa fa-edit"> Input Nilai</span> </b> </a>'+
                             '</td>'+
                             '<td>'+
-                            '<a href="javascript:void(0);" class="btn btn-primary btn-sm cek_nilai"> <b> <span class="fa fa-edit"> Input Nilai</span> </b> </a>'+
+                            '<a href="javascript:void(0);" class="btn btn-primary btn-sm cek_nilai" data-id_akun="'+data[i].id_akun+'" data-id_seleksi="'+data[i].id_seleksi+'" data-nama_peserta="'+data[i].nama_peserta+'"> <b> <span class="fa fa-edit"> Cek Nilai</span> </b> </a>'+
                             '</td>'+
                             '</tr>';
                         }
@@ -220,7 +251,7 @@
         /*Show List Peserta*/
 
         /*Input Nilai*/
-            $('#listPeserta').on('click','.input_nilai',function(){
+        $('#listPeserta').on('click','.input_nilai',function(){
                 // memasukkan data yang dipilih dari tbl list agenda updatean ke variabel 
                 var upid_akun         = $(this).data('id_akun');
                 var upid_seleksi      = $(this).data('id_seleksi');
@@ -296,6 +327,9 @@
                             $('#listPeserta').DataTable().destroy();
                             $('#listPeserta').find('tbody').empty();
                             document.getElementById('formInputNilai').reset();
+                            document.getElementById('id_sub_tes').disabled=true;
+                            document.getElementById('nilai_asli').disabled=true;
+                            document.getElementById('set_ke').setAttribute('disabled','');
                             showListPeserta();
                         }
                     }
@@ -303,9 +337,80 @@
                 return false;
             });
         /*Input Nilai*/  
+
+        /*Cek Nilai*/
+        $('#listPeserta').on('click','.cek_nilai',function(){
+                // memasukkan data yang dipilih dari tbl list agenda updatean ke variabel 
+                var upid_akun         = $(this).data('id_akun');
+                var upid_seleksi      = $(this).data('id_seleksi');
+                var upnama_peserta    = $(this).data('nama_peserta'); 
+                
+                // memasukkan data ke form updatean
+                $('[name="cek_id_akun"]').val(upid_akun);
+                $('[name="cek_id_seleksi"]').val(upid_seleksi);
+                $('[name="cek_nama_peserta"]').val(upnama_peserta);
+
+                $.ajax({
+                    type  : 'POST',
+                    url   : '<?php echo base_url()?>index.php/C_penyeleksi/lihatNilai/'+upid_akun,
+                    async : false,
+                    dataType : 'json',
+                    success : function(data){
+                        var html = '';
+                        var i;
+                        for(i=0; i<data.length; i++){
+                            var ii = i+1;
+                            var jenis_tes, jenis_sub_tes;
+                            if(data[i].id_bobot_tes!=4){
+                                nilai = parseInt(data[i].nilai_asli);
+                            }else{
+                                nilai = data[i].nilai_asli;
+                            }
+
+                            if(data[i].id_bobot_tes==1){
+                                jenis_tes = ' Tes Pukul';
+                            }else if(data[i].id_bobot_tes==2){
+                                jenis_tes = ' Tes Tangkap';
+                            }else if(data[i].id_bobot_tes==3){
+                                jenis_tes = ' Tes Lempar';
+                            }else if(data[i].id_bobot_tes==4){
+                                jenis_tes = ' Tes Lari ';
+                            }
+
+                            if(data[i].id_bobot_sub_tes==1 || data[i].id_bobot_sub_tes==3 || data[i].id_bobot_sub_tes== 5){
+                                jenis_sub_tes = 'Tes Keterampilan';
+                            }else if(data[i].id_bobot_sub_tes==2 || data[i].id_bobot_sub_tes==4 || data[i].id_bobot_sub_tes==6){
+                                jenis_sub_tes = 'Tes Unjuk Kerja';
+                            }else{
+                                jenis_sub_tes = 'Tes Kecepatan';
+                            }
+
+                            html += '<tr style="center">'+
+                            '<td>'+ii+' </td>'+
+                            '<td>'+jenis_tes+' </td>'+
+                            '<td>'+jenis_sub_tes+' </td>'+
+                            '<td> <center>'+data[i].set_ke+'</center> </td>'+
+                            '<td> <center>'+nilai+'</center></td>'+
+                            '</tr>';
+                        }
+                        $('#listNilai').find('tbody').empty();
+                        $('#showListNilai').html(html);
+
+                    }
+                });
+
+                $('#modalCekNilai').modal('show');
+            });
+        /*Cek Nilai*/
     /*MANAJEMEN INPUT NILAI*/
 
 	});
+
+$('#listNilai').DataTable({
+    "searching"         : true,
+    "scrollCollapse"    : false,
+    "paging"            : false
+});
 	   
 </script>
 </body>

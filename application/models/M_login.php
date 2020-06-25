@@ -49,6 +49,17 @@ class M_login extends CI_Model {
 			return false;
 		}
 	}
+
+	public function getEmail($value)
+	{
+		$this->db->where('email', $value);
+		$query = $this->db->get('akun');
+		if($query->num_rows() > 0){
+			return true;
+		}else{
+			return false;
+		}
+	}
 	
 	
 }

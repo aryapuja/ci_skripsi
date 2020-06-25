@@ -12,7 +12,7 @@
               <div class="card-body">
                 <div class="table-responsive">
 
-                <table id="listSeleksi" class="table table-responsive table-bordered table-hover" >
+                <table id="listSeleksi" class="table table-bordered table-hover" >
                   <thead style="width: 100%">
                   <tr style="width: 100%">
                     <th class="th-lg no-sort"> No </th>
@@ -21,7 +21,7 @@
                     <th class="th-lg"> Batas Umur (Maksimal)</th>
                     <th class="th-lg"> Tanggal Seleksi </th>
                     <th class="th-lg"> Tanggal Mulai Kejuaraan </th>
-                    <th class="th-lg"> Aksi </th>
+                    <th class="th-lg"> Daftar Seleksi </th>
                   </tr>
                   </thead>
                   <tbody id="showListSeleksi">
@@ -35,7 +35,7 @@
                     <th> Batas Umur (Maksimal)</th>
                     <th> Tanggal Seleksi </th>
                     <th> Tanggal Mulai Kejuaraan </th>
-                    <th> Aksi </th>
+                    <th> Daftar Seleksi </th>
                   </tr>
                   </tfoot>
                 </table>

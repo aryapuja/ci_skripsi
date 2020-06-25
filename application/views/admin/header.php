@@ -159,8 +159,8 @@
           </li>
           
           <li class="nav-item">
-            <a href="<?php echo site_url();?>/C_admin/viewHasilSeleksi" class="nav-link">
-              <i class="nav-icon fas fa-users"></i>
+            <a href="<?php echo site_url();?>/C_admin/viewSeleksiSelesai" class="nav-link">
+              <i class="nav-icon fas fa-archive"></i>
               <p>
                 Hasil Seleksi
               </p>
@@ -168,7 +168,7 @@
           </li>
 
           <li class="nav-item">
-            <a href="<?php echo site_url();?>/C_admin/viewUser" class="nav-link">
+            <a href="<?php echo site_url();?>/C_admin/viewUser" class="nav-link" >
               <i class="nav-icon fas fa-users"></i>
               <p>
                 Daftar Akun

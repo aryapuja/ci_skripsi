@@ -123,6 +123,14 @@
 			return $query->result();
 		}
 
+		public function getSeleksiBerjalan()
+		{
+			$this->db->where('status_seleksi', 'Belum Selesai');
+			$this->db->order_by('tgl_seleksi','asc');
+			$query = $this->db->get('list_seleksi');
+			return $query->result();
+		}
+
 		public function getSeleksiSelesai()
 		{
 			$this->db->where('status_seleksi', 'Selesai');
@@ -280,7 +288,7 @@
 		}
 	/*MANAJEMEN NILAI STANDAR*/
 
-	/*MANAJEMEN HASIL SELEKSI*/
+	/*PERHITUNGAN METODE*/
 		public function getPesertaSeleksi($id_seleksi,$tabel,$status)
 		{
 			$this->db->where('id_seleksi', $id_seleksi);
@@ -364,10 +372,12 @@
 			return $result;
 		}
 
-		public function updateNilaiQTes($id_akun,$id_seleksi,$id_bobot_tes,$nilai_q)
+		public function updateNilaiQTes($id_akun,$id_seleksi,$id_bobot_tes,$nilai_q1,$nilai_q2,$nilai_q3)
 		{
 			$data = array(
-				'nilai_qi' => $nilai_q,
+				'nilai_q1' => $nilai_q1,
+				'nilai_q2' => $nilai_q2,
+				'nilai_q3' => $nilai_q3,
 			);
 			$this->db->where('id_seleksi', $id_seleksi);
 			$this->db->where('id_akun', $id_akun);
@@ -438,15 +448,69 @@
 			return $result;
 		}
 
-		public function updateNilaiQiSeleksi($id_akun,$id_seleksi,$nilai_q)
+		public function updateNilaiQiSeleksi($id_akun,$id_seleksi,$nilai_q1,$nilai_q2,$nilai_q3)
 		{
 			$data = array(
-				'nilai_qi' => $nilai_q,
+				'nilai_q1' => $nilai_q1,
+				'nilai_q2' => $nilai_q2,
+				'nilai_q3' => $nilai_q3,
 			);
 			$this->db->where('id_seleksi', $id_seleksi);
 			$this->db->where('id_akun', $id_akun);
 			$result = $this->db->update('list_peserta', $data);
 			return $result;
+		}
+	/*PERHITUNGAN METODE*/
+
+	/*MANAJEMEN HASIL SELEKSI*/
+		public function getInfoSeleksi($id_seleksi)
+		{
+			$this->db->where('id_seleksi', $id_seleksi);
+			$query = $this->db->get('list_seleksi');
+			return $query->result();
+		}
+
+		public function countPeserta($id_seleksi)
+		{
+			$this->db->where('id_seleksi', $id_seleksi);
+			$this->db->where('status', 'Lulus');
+			$query = $this->db->get('list_peserta');
+			return $query->num_rows();
+		}	
+
+		public function getHasil($id_seleksi)
+		{
+			$this->db->where('id_seleksi', $id_seleksi);
+			$this->db->order_by('nilai_q2','asc');
+			$query = $this->db->get('list_peserta');
+			return $query->result();
+		}
+
+		public function getNilai($id_seleksi)
+		{
+			$this->db->where('id_seleksi', $id_seleksi);
+			$query = $this->db->get('nilai_per_tes');
+			return $query->result();
+		}
+
+		public function getRankPerTes($id_seleksi,$id_bobot_tes)
+		{
+			$this->db->where('id_seleksi', $id_seleksi);
+			$this->db->where('id_bobot_tes', $id_bobot_tes);
+			$this->db->order_by('nilai_q2','asc');
+			$query = $this->db->get('nilai_tes');
+			return $query->result();
+		}
+
+		public function getRankLari($id_seleksi,$id_bobot_tes)
+		{
+			$this->db->select('*, min(nilai_asli) AS nilai_min');
+			$this->db->where('id_seleksi', $id_seleksi);
+			$this->db->where('id_bobot_tes', $id_bobot_tes);
+			$this->db->group_by('id_akun');
+			$this->db->order_by('nilai_min','asc');
+			$query = $this->db->get('nilai_per_tes');
+			return $query->result();
 		}
 	/*MANAJEMEN HASIL SELEKSI*/
 

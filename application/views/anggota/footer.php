@@ -40,7 +40,8 @@
 <!-- Fungsi -->
 <script>
 	$(document).ready(function(){
-		showListSeleksi();
+        showListSeleksi();
+		showListSeleksiBerjalan();
 
 	/*MANAJEMEN AKUN*/
     	/*Edit Akun*/
@@ -157,8 +158,38 @@
         /*GANTI PASSWORD*/
 	/*MANAJEMEN AKUN*/
 
-
     /*MANAJEMEN DAFTAR SELEKSI*/
+        /*Show List*/
+            function showListSeleksiBerjalan(){
+                $.ajax({
+                    type  : 'POST',
+                    url   : '<?php echo base_url()?>index.php/C_anggota/getSeleksi',
+                    async : false,
+                    dataType : 'json',
+                    success : function(data){
+                        var html = '';
+                        var i;
+                        for(i=0; i<data.length; i++){
+                            var ii = i+1;
+                            html += '<tr style="center">'+
+                            '<td>'+ii+' </td>'+
+                            '<td>'+data[i].nama_seleksi+' </td>'+
+                            '<td>'+data[i].jenis_olahraga+' ('+data[i].jenis_kelamin+')</td>'+
+                            '<td>'+data[i].batas_umur+' Tahun </td>'+
+                            '<td>'+data[i].tgl_seleksi+' </td>'+
+                            '<td>'+data[i].tgl_kejuaraan+' </td>'+
+                            '</tr>';
+                        }
+                        $('#listSeleksiBerjalan').find('tbody').empty();
+                        $('#showListSeleksiBerjalan').html(html);
+                        $('#listSeleksiBerjalan').DataTable({
+                        });
+
+                    }
+                });
+            }
+        /*Show List*/
+
         /*Show List*/
             function showListSeleksi(){
                 $.ajax({

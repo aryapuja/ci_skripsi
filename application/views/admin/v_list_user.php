@@ -18,10 +18,7 @@
                     <th class="th-lg no-sort"> No </th>
                     <th class="th-lg"> Username </th>
                     <th class="th-lg"> Nama Lengkap </th>
-                    <th class="th-lg"> Tanggal Lahir </th>
-                    <th class="th-lg"> Jenis Kelamin</th>
                     <th class="th-lg"> Asal Sekolah </th>
-                    <th class="th-lg"> Email </th>
                     <th class="th-lg"> Level Akun </th>
                     <th class="th-lg"> Status Akun </th>
                     <th class="th-lg"> Aksi </th>
@@ -35,10 +32,7 @@
                     <th> No </th>
                     <th> Username </th>
                     <th> Nama Lengkap </th>
-                    <th> Tanggal Lahir </th>
-                    <th> Jenis Kelamin</th>
                     <th> Asal Sekolah </th>
-                    <th> Email </th>
                     <th> Level Akun </th>
                     <th> Status Akun </th>
                     <th> Aksi </th>

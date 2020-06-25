@@ -8,7 +8,46 @@
         <!-- /.row -->
         <!-- Main row -->
         <div class="row">
-
+          <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+            <!-- List Seleksi Yang Sedang Berjalan -->
+            <div class="card">
+              <div class="card-header">
+                <h3 class="card-title">Daftar Seleksi Yang Sedang Berjalan</h3>
+              </div>
+              <!-- /.card-header -->
+              <div class="card-body">
+                <div class="table-responsive">
+                  <table id="listSeleksiBerjalan" class="table table-bordered table-hover">
+                      <thead>
+                      <tr>
+                        <th class="th-lg no-sort"> No </th>
+                        <th class="th-lg"> Nama Seleksi </th>
+                        <th class="th-lg"> Jenis Olahraga </th>
+                        <th class="th-lg"> Batas Umur (Maksimal)</th>
+                        <th class="th-lg"> Tanggal Seleksi </th>
+                        <th class="th-lg"> Tanggal Kejuaraan </th>
+                      </tr>
+                      </thead>
+                      <tbody id="showListSeleksiBerjalan">
+                      
+                      </tbody>
+                      <tfoot>
+                      <tr>
+                        <th> No </th>
+                        <th> Nama Seleksi </th>
+                        <th> Jenis Olahraga </th>
+                        <th> Batas Umur (Maksimal)</th>
+                        <th> Tanggal Seleksi </th>
+                        <th> Tanggal Kejuaraan </th>
+                      </tr>
+                      </tfoot>
+                    </table>
+                </div>
+                <!-- /.table-responsive -->
+              </div>
+              <!-- /.card-body -->
+            </div>
+          </div>
         </div>
         <!-- /.row (main row) -->
       </div><!-- /.container-fluid -->

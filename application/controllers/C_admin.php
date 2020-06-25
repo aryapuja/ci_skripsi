@@ -97,9 +97,9 @@ class C_admin extends CI_Controller {
 		$jenis_kelamin 		= $this->input->post('jenis_kelamin');
 
 		$cek		= $this->M_admin->getUsername($username);
-		$cekEmail	= $this->M_admin->getIdEmail($email);
+		$cekEmail	= $this->M_admin->getEmail($email);
 
-		if($cekEmail == false){
+		if($cekEmail == true){
 				$data =['code' => 3];
 		}else{
 			if($cek == true){
@@ -142,6 +142,12 @@ class C_admin extends CI_Controller {
 		$this->load->view('admin/header.php');
 		$this->load->view('admin/v_list_seleksi');
 		$this->load->view('admin/footer.php');
+	}
+
+	public function getSeleksiBerjalan()
+	{
+		$data=$this->M_admin->getSeleksiBerjalan();
+		echo json_encode($data);
 	}
 
 	public function getSeleksi()
@@ -251,7 +257,7 @@ class C_admin extends CI_Controller {
 	{
 		$result="";
 		$id 			= $this->input->post('u_id');
-		$jenis_seleksi 	= $this->input->post('u_jenis_tes');
+		$jenis_tes 	= $this->input->post('u_jenis_tes');
         $nilai_bobot_tes 	= $this->input->post('u_nilai_bobot_tes');
 
         $cekJumlah = $this->M_admin->cekJumlahBobotSeleksi($id);
@@ -412,11 +418,11 @@ class C_admin extends CI_Controller {
         		for ($i=1; $i < 7; $i+=2) { 
 					$id_bobot_tes=0;
 					if($i == 1){
-        				$id_bobot_tes = 1;
+        				$id_bobot_tes = 1; // Tes Pukul
         			}else if($i == 3){
-        				$id_bobot_tes = 2;
+        				$id_bobot_tes = 2; // Tes Lempar
         			}else{
-        				$id_bobot_tes = 3;
+        				$id_bobot_tes = 3; // Tes Tangkap
         			}
         			// Insert Tabel nilai_tes = nilai tiap tes (blm di normalisasi)
         			$avg_keterampilan = number_format($this->M_admin->hitungAvgSubTes($id_seleksi,$id_akun,$i)->nilai_konversi,4);
@@ -465,6 +471,7 @@ class C_admin extends CI_Controller {
         		$nmax_unjuk_kerja[$id_bobot_tes] = $this->M_admin->getMaxNilaiTes($id_seleksi,$id_bobot_tes,'nilai_tes_unjuk_kerja');
         		$nmin_keterampilan[$id_bobot_tes] = $this->M_admin->getMinNilaiTes($id_seleksi,$id_bobot_tes,'nilai_tes_keterampilan');	
         		$nmin_unjuk_kerja[$id_bobot_tes] = $this->M_admin->getMinNilaiTes($id_seleksi,$id_bobot_tes,'nilai_tes_unjuk_kerja'); 
+        		
 
 	        	// Hitung nilai normalisasi
 	        	$nrml_keterampilan[$id_bobot_tes] = number_format(($nmax_keterampilan[$id_bobot_tes] - $nilai_tes_keterampilan) / ($nmax_keterampilan[$id_bobot_tes] - $nmin_keterampilan[$id_bobot_tes]),4) ;
@@ -476,14 +483,18 @@ class C_admin extends CI_Controller {
 
 	        	//hitung nilai S
 	        	$nilai_s[$id_bobot_tes] = number_format(($nrml_keterampilan[$id_bobot_tes] * ($bobot_keterampilan/100)) + ($nrml_unjuk_kerja[$id_bobot_tes] * ($bobot_unjuk_kerja/100)),4);
+
 	        	//Hitung nilai R
 	        	if(($nrml_keterampilan[$id_bobot_tes] * ($bobot_keterampilan/100)) > ($nrml_unjuk_kerja[$id_bobot_tes] * ($bobot_unjuk_kerja/100))){
 	        		$nilai_r[$id_bobot_tes] = number_format(($nrml_keterampilan[$id_bobot_tes] * ($bobot_keterampilan/100)),4); 
 	        	}else{
 	        		$nilai_r[$id_bobot_tes] = number_format(($nrml_unjuk_kerja[$id_bobot_tes] * ($bobot_unjuk_kerja/100)),4);
 	        	}
-        		$this->M_admin->updateNilaiTes($id_akun,$id_seleksi,$id_bobot_tes,$nilai_s[$id_bobot_tes],$nilai_r[$id_bobot_tes]);
+        		// $this->M_admin->updateNilaiTes($id_akun,$id_seleksi,$id_bobot_tes,$nilai_s[$id_bobot_tes],$nilai_r[$id_bobot_tes]);
+       			printf($nama_peserta.' || '.$id_bobot_tes.' || '.$nilai_tes_unjuk_kerja.' || '.$nilai_tes_keterampilan.' <br> ');
+       			// printf($nama_peserta.' || '.$nrml_keterampilan[$id_bobot_tes].' || '.$nrml_unjuk_kerja[$id_bobot_tes].' || '.$nilai_s[$id_bobot_tes].' || '.$nilai_r[$id_bobot_tes].' <br> ');
 	        }
+        		die();
 		}
 	/*Menghitung Normalisasi Rata-Rata Per Tes - Nilai Si - Nilai Ri*/
 
@@ -494,23 +505,29 @@ class C_admin extends CI_Controller {
 
 			$peserta = $this->M_admin->getPesertaSeleksi($id_seleksi,'nilai_tes','Memenuhi Standar');
 			foreach ($peserta as $key) {
-        		$id_akun = $key['id_akun'];
-        		$nama_peserta = $key['nama_peserta'];
-	        	$id_bobot_tes = $key['id_bobot_tes'];
-	        	$nilai_s = $key['nilai_si'];
-	        	$nilai_r = $key['nilai_ri'];
+				$id_akun = $key['id_akun'];
+				$nama_peserta = $key['nama_peserta'];
+				$id_bobot_tes = $key['id_bobot_tes'];
+				$nilai_s = $key['nilai_si'];
+				$nilai_r = $key['nilai_ri'];
 
-	        	//Ambil nilai min-max dari Si dan Ri
-	        	$nmax_S[$id_bobot_tes] = $this->M_admin->getMaxNilaiTes($id_seleksi,$id_bobot_tes,'nilai_si');
-        		$nmax_R[$id_bobot_tes] = $this->M_admin->getMaxNilaiTes($id_seleksi,$id_bobot_tes,'nilai_ri');
-        		$nmin_S[$id_bobot_tes] = $this->M_admin->getMinNilaiTes($id_seleksi,$id_bobot_tes,'nilai_si');
-        		$nmin_R[$id_bobot_tes] = $this->M_admin->getMinNilaiTes($id_seleksi,$id_bobot_tes,'nilai_ri');
+				//Ambil nilai min-max dari Si dan Ri
+				$nmax_S[$id_bobot_tes] = $this->M_admin->getMaxNilaiTes($id_seleksi,$id_bobot_tes,'nilai_si');
+				$nmax_R[$id_bobot_tes] = $this->M_admin->getMaxNilaiTes($id_seleksi,$id_bobot_tes,'nilai_ri');
+				$nmin_S[$id_bobot_tes] = $this->M_admin->getMinNilaiTes($id_seleksi,$id_bobot_tes,'nilai_si');
+				$nmin_R[$id_bobot_tes] = $this->M_admin->getMinNilaiTes($id_seleksi,$id_bobot_tes,'nilai_ri');
 
-	        	//hitung nilai Q || Nilai V = 0,5
-	        	$nilai_q[$id_bobot_tes] = number_format((0.5*(($nilai_s-$nmin_S[$id_bobot_tes])/($nmax_S[$id_bobot_tes]-$nmin_S[$id_bobot_tes])))+((1-0.5)*(($nilai_r-$nmin_R[$id_bobot_tes])/($nmax_R[$id_bobot_tes]-$nmin_R[$id_bobot_tes]))),4);
+				//hitung nilai Q1 || Nilai V = 0,45
+				$nilai_q1[$id_bobot_tes] = number_format((0.45*(($nilai_s-$nmin_S[$id_bobot_tes])/($nmax_S[$id_bobot_tes]-$nmin_S[$id_bobot_tes])))+((1-0.45)*(($nilai_r-$nmin_R[$id_bobot_tes])/($nmax_R[$id_bobot_tes]-$nmin_R[$id_bobot_tes]))),4);
+				
+				//hitung nilai Q2 || Nilai V = 0,5
+				$nilai_q2[$id_bobot_tes] = number_format((0.5*(($nilai_s-$nmin_S[$id_bobot_tes])/($nmax_S[$id_bobot_tes]-$nmin_S[$id_bobot_tes])))+((1-0.5)*(($nilai_r-$nmin_R[$id_bobot_tes])/($nmax_R[$id_bobot_tes]-$nmin_R[$id_bobot_tes]))),4);
+				
+				//hitung nilai Q3 || Nilai V = 0,55
+				$nilai_q3[$id_bobot_tes] = number_format((0.55*(($nilai_s-$nmin_S[$id_bobot_tes])/($nmax_S[$id_bobot_tes]-$nmin_S[$id_bobot_tes])))+((1-0.55)*(($nilai_r-$nmin_R[$id_bobot_tes])/($nmax_R[$id_bobot_tes]-$nmin_R[$id_bobot_tes]))),4);
 
-        		$this->M_admin->updateNilaiQTes($id_akun,$id_seleksi,$id_bobot_tes,$nilai_q[$id_bobot_tes]);
-	        }
+				$this->M_admin->updateNilaiQTes($id_akun,$id_seleksi,$id_bobot_tes,$nilai_q1[$id_bobot_tes],$nilai_q2[$id_bobot_tes],$nilai_q3[$id_bobot_tes]);
+			}
 		}
 	/*Hitung Nilai Qi Per Tes*/
 
@@ -528,11 +545,13 @@ class C_admin extends CI_Controller {
         		$id_akun = $key['id_akun'];
         		$nama_peserta = $key['nama_peserta'];
         		$nilai_tes = [$key['tes_pukul'],$key['tes_tangkap'],$key['tes_lempar'],$key['tes_lari']];
+
         		//Menghitung Nilai Normalisasi Seluruh Tes
         		$nrml_pukul =number_format( ($nMax[0]-$nilai_tes[0])/($nMax[0]-$nMin[0]),4);
         		$nrml_tangkap = number_format(($nMax[1]-$nilai_tes[1])/($nMax[1]-$nMin[1]),4);
         		$nrml_lempar = number_format(($nMax[2]-$nilai_tes[2])/($nMax[2]-$nMin[2]),4);
         		$nrml_lari = number_format(($nMax[3]-$nilai_tes[3])/($nMax[3]-$nMin[3]),4);
+
         		//Menghitung Nilai Si dan Ri Seluruh Tes
         		$nilai_sr = [($nrml_pukul*($nBobot[0]/100)),($nrml_tangkap*($nBobot[1]/100)),($nrml_lempar*($nBobot[2]/100)),($nrml_lari*($nBobot[3]/100))];
         		$nilai_s = number_format(array_sum($nilai_sr),4) ;
@@ -558,23 +577,27 @@ class C_admin extends CI_Controller {
         		$nama_peserta = $key['nama_peserta'];
 	        	$nilai_s = $key['nilai_si'];
 	        	$nilai_r = $key['nilai_ri'];
+	        	//hitung nilai Q || Nilai V = 0,45
+	        	$nilai_q1 = number_format((0.45*(($nilai_s-$nmin_S)/($nmax_S - $nmin_S)))+((1-0.45)*(($nilai_r-$nmin_R)/($nmax_R-$nmin_R))),4);
 	        	//hitung nilai Q || Nilai V = 0,5
-	        	$nilai_q = number_format((0.5*(($nilai_s-$nmin_S)/($nmax_S - $nmin_S)))+((1-0.5)*(($nilai_r-$nmin_R)/($nmax_R-$nmin_R))),4);
-        		$this->M_admin->updateNilaiQiSeleksi($id_akun,$id_seleksi,$nilai_q);
+	        	$nilai_q2 = number_format((0.5*(($nilai_s-$nmin_S)/($nmax_S - $nmin_S)))+((1-0.5)*(($nilai_r-$nmin_R)/($nmax_R-$nmin_R))),4);
+	        	//hitung nilai Q || Nilai V = 0,55
+	        	$nilai_q3 = number_format((0.55*(($nilai_s-$nmin_S)/($nmax_S - $nmin_S)))+((1-0.55)*(($nilai_r-$nmin_R)/($nmax_R-$nmin_R))),4);;
+        		$this->M_admin->updateNilaiQiSeleksi($id_akun,$id_seleksi,$nilai_q1,$nilai_q2,$nilai_q3);
 	        }
 		}
 	/*Hitung Nilai Qi Seleksi*/
 /*PERHITUNGAN NILAI*/
 
 /*MANAJEMEN HASIL SELEKSI*/
-	Public function viewHasilSeleksi()
+	Public function viewSeleksiSelesai()
 	{
 		$data['aktif'] = $this->M_admin->countUser('Aktif');
 		$data['idle'] = $this->M_admin->countUser('Menunggu Persetujuan');
 		$data['nonaktif'] = $this->M_admin->countUser('Tidak Aktif');
 
 		$this->load->view('admin/header.php');
-		$this->load->view('admin/v_lihat_hasil_seleksi',$data);
+		$this->load->view('admin/v_list_seleksi_selesai',$data);
 		$this->load->view('admin/footer.php');
 	}
 
@@ -584,37 +607,40 @@ class C_admin extends CI_Controller {
 		echo json_encode($data);
 	}
 
-	public function lihatHasilSeleksi()
+	Public function getHasilSeleksi($id_seleksi)
 	{
-		$id 				= $this->input->post('u_id_seleksi');
-		$nama_seleksi 		= $this->input->post('u_nama_seleksi');
-        $jenis_olahraga 	= $this->input->post('u_jenis_olahraga');
-        $jenis_kelamin		= $this->input->post('u_jenis_kelamin');
-        $batas_umur			= $this->input->post('u_batas_umur');
-        $tgl_seleksi		= $this->input->post('u_tgl_seleksi');
-        $tgl_kejuaraan 		= $this->input->post('u_tgl_kejuaraan');
-        $set_pukul			= $this->input->post('u_set_pukul');
-        $set_tangkap		= $this->input->post('u_set_tangkap');
-        $set_lempar			= $this->input->post('u_set_lempar');
-        $rep_lari			= $this->input->post('u_rep_lari');
-        $jenis_tes 			= $this->input->post('u_jenis_tes');
-        if($jenis_tes == 1){
-        	$tes_keterampilan =1; $tes_unjuk_kerja =2;
-        	print_r($tes_keterampilan.' || '.$tes_unjuk_kerja);die();
-        }else if($jenis_tes == 2){
-        	$tes_keterampilan =3; $tes_unjuk_kerja =4;
-        	print_r($tes_keterampilan.' || '.$tes_unjuk_kerja);die();
-        }else if($jenis_tes == 3){
-        	$tes_keterampilan =5; $tes_unjuk_kerja =6;
-        	print_r($tes_keterampilan.' || '.$tes_unjuk_kerja);die();
-        }else if($jenis_tes == 4){
-        	$tes_kecepatan = 7;
-        	print_r($tes_kecepatan);die();
-        }else{
-        	$cek = 'Semua Tes';
-        	print_r($cek);die();        	
-        }
+		// $data['hasil']=$this->M_admin->getHasil($id_seleksi);
+		$data=$this->M_admin->getHasil($id_seleksi);
+		echo json_encode($data);
+	}
 
+	Public function viewHasilSeleksi($id_seleksi)
+	{
+		$data['aktif'] 		= $this->M_admin->countUser('Aktif');
+		$data['idle'] 		= $this->M_admin->countUser('Menunggu Persetujuan');
+		$data['nonaktif'] 	= $this->M_admin->countUser('Tidak Aktif');
+		$data['info']		= $this->M_admin->getInfoSeleksi($id_seleksi);
+		$data['hasil']		= $this->M_admin->getHasil($id_seleksi);
+		$data['jmlPeserta']	= $this->M_admin->countPeserta($id_seleksi);
+
+		$this->load->view('admin/header.php');
+		$this->load->view('admin/v_hasil',$data);
+		$this->load->view('admin/footer.php');
+	}
+
+	public function downloadHasilSeleksi($id_seleksi)
+	{
+		$this->load->library('pdf');
+		$data['info']			= $this->M_admin->getInfoSeleksi($id_seleksi);
+		$data['hasil']			= $this->M_admin->getHasil($id_seleksi);
+		$data['nilai']			= $this->M_admin->getNilai($id_seleksi);
+		$data['rankPukul']		= $this->M_admin->getRankPerTes($id_seleksi,1);
+		$data['rankTangkap']	= $this->M_admin->getRankPerTes($id_seleksi,2);
+		$data['rankLempar']		= $this->M_admin->getRankPerTes($id_seleksi,3);
+		$data['rankLari']		= $this->M_admin->getRanklari($id_seleksi,4);
+
+		$html = $this->load->view('admin/v_pdf',$data,true);
+		$this->pdf->createPDF($html, 'Hasil Seleksi - '.$data['info'][0]->nama_seleksi);
 	}
 /*MANAJEMEN HASIL SELEKSI*/
 
@@ -622,4 +648,5 @@ class C_admin extends CI_Controller {
 
 /* End of file controllername.php */
 /* Location: ./application/controllers/controllername.php */
+//        		printf($nama_peserta.' || '.$avg_unjuk_kerja.' || '.$avg_keterampilan.' || '.$avg_tes[$i].' <br> ');
 ?>
